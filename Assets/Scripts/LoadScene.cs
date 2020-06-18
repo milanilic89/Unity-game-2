@@ -20,6 +20,7 @@ public class LoadScene : MonoBehaviour
             PlayerPrefs.SetInt("FirstLaunch", 1);
             SceneManager.LoadScene("RunAndPlay", LoadSceneMode.Additive);
             SceneManager.LoadScene("GameSettings", LoadSceneMode.Additive);
+
         }
         else
         {
