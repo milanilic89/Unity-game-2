@@ -6,16 +6,17 @@ public class GenerateMap : MonoBehaviour
 {
     public int row = 10;
     public int column = 10;
-    public float padding = 1f;
+    public float padding = 0f;
     public Transform nodePrefab1;
     public Transform nodePrefab2;
-    public Transform player;
 
+    public int Xstart = 0, Ystart = 4;
+    public int Xend = 9, Yend = 4;
 
 
     public List<Transform> grid = new List<Transform>();
 
-    // Use this for initialization
+    // Map initialization
     void Start()
     {
         this.generateGrid();
@@ -23,27 +24,26 @@ public class GenerateMap : MonoBehaviour
     }
 
     /// <summary>
-    /// Generate the grid with the node.
+    /// Generate the grid with the nodes.
     /// </summary>
     public void generateGrid()
     {
-
-        //int counter = 0;
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < column; j++)
             {
                 int randomPrefab = Random.Range(0, 2);
                 Transform node = randomPrefab == 0 ? Instantiate(nodePrefab1, transform) : Instantiate(nodePrefab2, transform);
+                
                 node.name = "node (" + i + "," + j + ")";
 
                 node.GetComponent<Node>().x = i;
                 node.GetComponent<Node>().y = j;
-
+                
                 node.tag = "node";
 
                 grid.Add(node);
-                //counter++;
+
             }
         }
     }
