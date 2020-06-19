@@ -1,2 +1,1 @@
-#read instalation instructions 
- 
+#check Installation_start instructions - Unity C# - Pathfinding.pdf
