@@ -9,6 +9,11 @@ TagManager:
   - startButton
   - endButton
   - reset
+  - start
+  - end
+  - player1
+  - player2
+  - player3
   layers:
   - Default
   - TransparentFX

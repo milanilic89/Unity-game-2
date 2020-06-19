@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -306, y: 73}
+  m_AnchoredPosition: {x: 2, y: 381}
   m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &694189718
@@ -203,13 +203,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 694189719}
   m_TextComponent: {fileID: 1642139973}
   m_Placeholder: {fileID: 789365734}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -268,6 +268,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1539541626}
     m_Modifications:
+    - target: {fileID: 141129875407963628, guid: 840bb759de259d64386f5bdf726540c1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 976138797534371036, guid: 840bb759de259d64386f5bdf726540c1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -574,6 +579,7 @@ MonoBehaviour:
   InputFieldLevel: {fileID: 694189718}
   startBtn: {fileID: 1248069875}
   endBtn: {fileID: 1248069875}
+  ReplayMode: 0
 --- !u!114 &1029846956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,9 +600,14 @@ MonoBehaviour:
   stop: 0
   level: 1
   playerSpeed: 4
+  replayMode: 0
   startNode: {fileID: 0}
   endNode: {fileID: 0}
   levelsHistory: []
+  levels: []
+  levelField: {fileID: 694189718}
+  playerStep: node (1,4)
+  replayLevel: 0
 --- !u!114 &1029846958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1677,7 +1688,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -194, y: 70}
+  m_AnchoredPosition: {x: 123, y: 381}
   m_SizeDelta: {x: 120, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1713979501
@@ -1723,13 +1734,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1029846953}
-        m_MethodName: RepalybtnFindPath
-        m_Mode: 3
+      - m_Target: {fileID: 1029846956}
+        m_MethodName: LoadPlayer
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1807,7 +1818,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -251.9, y: 16.3}
+  m_AnchoredPosition: {x: -261, y: 18}
   m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1823185772
@@ -1855,7 +1866,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1029846956}
         m_MethodName: ListLevels
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

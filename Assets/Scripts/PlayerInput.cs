@@ -27,6 +27,9 @@ public class PlayerInput : MonoBehaviour
     private Player player;
     private bool colorPath = false;
 
+    public bool ReplayMode = false;
+
+    private Dictionary<int, string> sceneLevel = new Dictionary<int, string>();
 
     // Update is called once per frame
     void Update()
@@ -87,10 +90,12 @@ public class PlayerInput : MonoBehaviour
     /// </summary>
     public void btnFindPath()
     {
+        //this.player.
+
         // Only find if there are start and end node.
         if (startNode != null && endNode != null)
         {
-            SetLatestBlockPath();
+            //SetLatestBlockPath();
             SetGame();
             // Execute Shortest Path.
             ShortestPath finder = gameObject.GetComponent<ShortestPath>();
@@ -102,6 +107,13 @@ public class PlayerInput : MonoBehaviour
             }
 
             List<Transform> paths = finder.findShortestPath(startNode, endNode);
+
+            //print("paths count: " + paths.Count);
+
+            //List<Transform> paths = finder.FindPath_DFS_Algo(startNode, endNode);
+
+            //List<Transform> paths = finder.BFS_traversalAlgo(startNode, endNode);
+
 
             if (paths.Count == 0)
             {
@@ -118,8 +130,8 @@ public class PlayerInput : MonoBehaviour
 
                 // color path
 
-                if (this.colorPath)
-                    path.GetComponent<Image>().color = new Color(0.5f, 0.1f, 0.1f, 1.0f);
+                //if (this.colorPath)
+                //path.GetComponent<Image>().color = new Color(0.5f, 0.1f, 0.1f, 1.0f);
             }
 
             //set path to player one
@@ -131,72 +143,61 @@ public class PlayerInput : MonoBehaviour
 
             this.player = players[0].GetComponent<Player>();
 
-            GameObject gm = (GameObject)players[0]; // take first player
-            gm.GetComponent<Player>().paths = paths;
+            this.player.paths = paths;
 
+            // add level after play
+            Level l = new Level(this.player.level, blockPath, this.player.paths);
+            this.player.levels.Add(l);
+
+            //print("level(N): " + this.player.levels.Count);
+            //print("::level:: " + l.level + " :: blocks :: " + l.blockPath.Count + " :: moves :: " + l.movePath.Count + " :: ");
 
         }
     }
 
-    private void SetLatestBlockPath()
-    {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
+    //private void SetLatestBlockPath()
+    //{
+    //    GameObject[] players = GameObject.FindGameObjectsWithTag("player");
 
-        Player player = players[0].GetComponent<Player>();
+    //    Player player = players[0].GetComponent<Player>();
 
-        if (player != null)
-        {
-            this.player = player;
+    //    if (player != null)
+    //    {
+    //        this.player = player;
+                        
+    //        ClearBlockPathsAndSetNewOne(lastlevel.blockPath);
 
-            Level lastlevel = this.player.levelsHistory.Last();
+    //        this.blockPath = lastlevel.blockPath;
+    //    }
+    //}
 
-            ClearBlockPathsAndSetNewOne(lastlevel.blockPath);
 
-            this.blockPath = lastlevel.blockPath;
-        }
-    }
+    //public void RepalyAnyLevel(int replayLevel)
+    //{
+    //    this.player.replayMode = true;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void RepalybtnFindPath(int levelInd)
-    {
-        if (this.InputFieldLevel != null)
-            levelInd = int.Parse(this.InputFieldLevel.text);
+    //    if (this.InputFieldLevel != null)
+    //        replayLevel = int.Parse(this.InputFieldLevel.text);
 
-        foreach (Level level in this.player.levelsHistory)
-        {
-            if (level.level == levelInd)
-            {
-                print("REPLAYING level " + level.level + "number of blocks " + level.blockPath.Count + "path algoritam " + level.movePath.Count);
+    //    foreach (Level level in this.player.levels)
+    //    {
+    //        if (level.level == replayLevel)
+    //        {
+    //            ClearBlockPathsAndSetNewOne(level.blockPath);
 
-                ClearBlockPathsAndSetNewOne(level.blockPath);
+    //            this.player.reset();
 
-                this.blockPath = level.blockPath;
+    //            this.blockPath = level.blockPath;
 
-                // Only find if there are start and end node.
-                if (startNode != null && endNode != null)
-                {
-                    SetGame();
+    //            this.player.paths = level.movePath;
 
-                    List<Transform> paths = level.movePath;
 
-                    //set path to player one
-                    GameObject[] players = GameObject.FindGameObjectsWithTag("player");
 
-                    (players[0].GetComponent<Player>()).paths = paths;
+    //            break;
+    //        }
+    //    }
+    //}
 
-                    (players[0].GetComponent<Player>()).reset();
-
-                    this.player = players[0].GetComponent<Player>();
-
-                    GameObject gm = (GameObject)players[0]; // take first player
-                    gm.GetComponent<Player>().paths = paths;
-                }
-                break;
-            }
-        }
-    }
 
     void ClearBlockPathsAndSetNewOne(List<Transform> blocks)
     {
@@ -206,13 +207,19 @@ public class PlayerInput : MonoBehaviour
         foreach (GameObject gamenode in nodes)
         {
             Node n = gamenode.GetComponent<Node>();
-            gamenode.GetComponent<Image>().color = Color.white;
+            n.setWalkable(true);
+
+            //gamenode.GetComponent<Image>().color = Color.white;
         }
 
-        foreach (Transform t in blocks)
+        if (blocks != null)
         {
-            Node n = t.GetComponent<Node>();
-            t.GetComponent<Image>().color = Color.black;
+            foreach (Transform t in blocks)
+            {
+                Node n = t.GetComponent<Node>();
+                n.setWalkable(false);
+                //t.GetComponent<Image>().color = Color.black;
+            }
         }
     }
 
@@ -646,8 +653,12 @@ public class PlayerInput : MonoBehaviour
     public void btnReplay()
     {
 
-        //this.player.replay();
+        this.player.replay();
+        this.player.replayMode = true;
+        this.ReplayMode = true;
         btnFindPath();
+
+        PlayerPrefs.SetString("ReplayRun", "true");
     }
 
     public void btnColorPath()
@@ -659,10 +670,29 @@ public class PlayerInput : MonoBehaviour
 
     public void PlayNextLevel()
     {
-        btnBlockPath();
+        saveScene();
+
+        //btnBlockPath();
 
         btnFindPath();
     }
+
+    public void saveScene()
+    {
+        //print("Scena sacuvana");
+
+        //Scene newScene = SceneManager.CreateScene("My New Scene-level-"+this.player.level);
+
+        //this.sceneLevel.Add(this.player.level, newScene.name);
+
+        ////this.sceneLevel.Add(this.player.level, SceneManager.GetActiveScene().buildIndex);
+
+        ////if (this.levelScene != null)
+        ////    SceneManager.LoadScene(this.levelScene);
+        //print("saved level scene count:" + this.sceneLevel.Count);
+
+    }
+
 
     public void AutoRun()
     {

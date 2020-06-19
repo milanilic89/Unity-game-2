@@ -18,9 +18,12 @@ public class ShortestPath : MonoBehaviour
         nodes = GameObject.FindGameObjectsWithTag("node");
 
         List<Transform> result = new List<Transform>();
-        
+
         // algoritam  
         Transform node = DijkstrasAlgo(start, end);
+
+        //Transform node = Search(start, end);
+
 
         // While there's still previous node, we will continue.
         while (node != null)
@@ -34,6 +37,39 @@ public class ShortestPath : MonoBehaviour
         result.Reverse();
         return result;
     }
+
+    //public List<Transform> findShortestPath(Transform start, Transform end)
+    //{
+    //    nodes = GameObject.FindGameObjectsWithTag("node");
+
+    //    List<Transform> result = new List<Transform>();
+
+    //    //foreach(GameObject nodeGO in nodes)
+    //    //{
+    //    //    Node node = nodeGO.GetComponent<Node>();
+
+    //    //    print("node name: " + node.name + " parent node: " + node.parentNodeName);
+    //    //}
+
+
+    //    Transform node = Search(start, end.name);
+
+
+    //    // While there's still previous node, we will continue.
+    //    while (node != null)
+    //    {
+    //        result.Add(node);
+    //        Node currentNode = node.GetComponent<Node>();
+    //        print("nasao " + currentNode.name);
+    //        print("parent node  " + currentNode.parentNodeName);
+    //        node = Search(start, currentNode.parentNodeName); // currentNode.getParentNode();
+    //        print("parent node 2 " + currentNode.parentNodeName);
+    //    }
+
+    //    // Reverse the list so that it will be from start to end.
+    //    result.Reverse();
+    //    return result;
+    //}
 
     /// <summary>
     /// Dijkstra Algorithm to find the shortest path
@@ -113,6 +149,94 @@ public class ShortestPath : MonoBehaviour
         //print("Path completed!");
 
         return end;
+    }
+
+
+
+    public Transform Search(Transform root, string nameToSearchFor)
+    {
+        //string nameToSearchFor = nameToSearchForT.GetComponent<Node>().name;
+
+        Queue<Transform> Q = new Queue<Transform>();
+        HashSet<Transform> S = new HashSet<Transform>();
+        Q.Enqueue(root);
+        S.Add(root);
+
+        while (Q.Count > 0)
+        {
+            Transform e = Q.Dequeue();
+            if (e.GetComponent<Node>().name == nameToSearchFor)
+                return e;
+            foreach (Transform friend in e.GetComponent<Node>().getNeighbourNode())
+            {
+                print("prolazi");
+                if (!S.Contains(friend))
+                {
+                    Q.Enqueue(friend);
+                    S.Add(friend);
+                }
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Breadth-first search BFS traversal Algorithm to find the shortest path
+    /// </summary>
+    /// <param name="start">The start point</param>
+    /// <param name="end">The end point</param>
+    /// <returns>The end node</returns>
+    public List<Transform> BFS_traversalAlgo(Transform start, Transform end)
+    {
+        Queue<Transform> q = new Queue<Transform>();
+        q.Enqueue(start);
+
+        while (q.Count > 0)
+        {
+            start = q.Dequeue();
+
+            foreach (Transform child in start.GetComponent<Node>().getNeighbourNode())
+                if (child != null)
+                    q.Enqueue(child);
+        }
+
+        return q.ToList<Transform>();
+    }
+
+    /// <summary>
+    /// DFS traversal Algorithm to find the shortest path
+    /// </summary>
+    /// <param name="start">The start point</param>
+    /// <param name="end">The end point</param>
+    /// <returns>The end node</returns>
+    private Transform DFS_traversalAlgo(Transform start, Transform end)
+    {
+        return null;
+    }
+
+    //DFS find path
+    public List<Transform> FindPath_DFS_Algo(Transform start, Transform target)
+    {
+        List<Transform> path = new List<Transform>();
+
+        path.Add(start);
+
+        if (target == start)
+        {
+            return path;
+        }
+
+        foreach (Transform tn in start.GetComponent<Node>().getNeighbourNode())
+        {
+            List<Transform> childPath = FindPath_DFS_Algo(tn, target);
+            if (childPath != null)
+            {
+                path.AddRange(childPath);
+                return path;
+            }
+        }
+
+        return null;
     }
 
 }

@@ -37,6 +37,9 @@ public class GenerateMap : MonoBehaviour
                 Transform node = randomPrefab == 0 ? Instantiate(nodePrefab1, transform) : Instantiate(nodePrefab2, transform);
                 node.name = "node (" + i + "," + j + ")";
 
+                node.GetComponent<Node>().x = i;
+                node.GetComponent<Node>().y = j;
+
                 node.tag = "node";
 
                 grid.Add(node);

@@ -9,11 +9,16 @@ public class Node : MonoBehaviour
 
     [SerializeField] private float weight = int.MaxValue;
     [SerializeField] private Transform parentNode = null;
+    [SerializeField] public string parentNodeName = null;
     [SerializeField] private List<Transform> neighbourNode;
     [SerializeField] private bool walkable = true;
 
     public bool isStart = false;
     public bool isEnd = false;
+
+    public int x=0;
+    public int y=0;
+
 
     // Use this for initialization
     void Start()
@@ -39,6 +44,7 @@ public class Node : MonoBehaviour
     public void setParentNode(Transform node)
     {
         this.parentNode = node;
+        this.parentNodeName = node.name;
     }
 
     /// <summary>.
@@ -76,6 +82,8 @@ public class Node : MonoBehaviour
     public void addNeighbourNode(Transform node)
     {
         this.neighbourNode.Add(node);
+
+        node.GetComponent<Node>().setParentNode(this.transform);
     }
 
     // -------------------------------- Getters --------------------------------
@@ -134,5 +142,8 @@ public class Node : MonoBehaviour
     {
         this.isStart = true;
     }
+
+
+
 
 }
