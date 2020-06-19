@@ -1,8 +1,0 @@
-# Instalation instructions
-
- 1. Download the repository - https://github.com/milanilic89/Unity-game-2
- 2. Open project in Unity [2019.3.15f1]
- 3. Add "GameSettings" scene 
- 4. Remove defult scene "Untitled" scene
- 5. Select Play button
-
