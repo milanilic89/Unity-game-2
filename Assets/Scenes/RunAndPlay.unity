@@ -2262,7 +2262,7 @@ MonoBehaviour:
     type: 3}
   playerPrefab: {fileID: 2462591850063793802, guid: 102e81083ca11bc44afeab800f624530,
     type: 3}
-  enabledAlgorithams: 1
+  enabledAlgorithams: 5
   gameLevel: 2
   grid: []
   blockNodes: []
