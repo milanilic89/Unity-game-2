@@ -33,7 +33,7 @@ public class PlayerInput : MonoBehaviour
 
     void Start()
     {
-        StartAndEnd_Init();
+
     }
 
     // Update is called once per frame
@@ -42,46 +42,6 @@ public class PlayerInput : MonoBehaviour
         SetDefaultNodes();
     }
 
-    private void StartAndEnd_Init()
-    {
-        GameObject startButton = GameObject.Find("startRunner");
-
-        if (startButton != null)
-        {
-            Button startRunButton = startButton.GetComponent<Button>();
-            startRunButton.onClick.AddListener(delegate { addNextRunner(); });
-        }
-
-        GameObject endButton = GameObject.Find("playNewLevel");
-
-        if (endButton != null)
-        {
-            Button playNewLevelButton = endButton.GetComponent<Button>();
-            playNewLevelButton.onClick.AddListener(delegate { PlayNextLevel(); });
-        }
-
-    }
-
-    private void addNextRunner()
-    {
-        print("Next runner added");
-
-        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
-
-        foreach (GameObject _player in players)
-        {
-            Player nextPlayer = _player.GetComponent<Player>();
-
-            if (nextPlayer != null && !nextPlayer.playMode)
-            {
-                print(nextPlayer.transform.name + " has been added and RUN started");
-                _player.transform.Translate(100f, 0, 0, Space.World);
-
-                nextPlayer.playMode = true;
-            }
-        }
-
-    }
 
     ///// <summary>
     ///// Button for Set Starting node.

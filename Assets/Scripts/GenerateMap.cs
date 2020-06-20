@@ -14,7 +14,7 @@ public class GenerateMap : MonoBehaviour
 
     public int Xstart = 0, Ystart = 4;
     public int Xend = 9, Yend = 4;
-    
+
     private Transform startButton;
     private Transform endButton;
 
@@ -62,7 +62,9 @@ public class GenerateMap : MonoBehaviour
 
         startButton = Instantiate(startPrefab, canvas.transform);
         startButton.name = "startRunner";
+        startButton.GetComponent<Button>().onClick.AddListener(delegate { addNextRunner(); });
         endButton = Instantiate(endPrefab, canvas.transform);
+        endButton.GetComponent<Button>().onClick.AddListener(delegate { PlayNextLevel(); });
         endButton.name = "playNewLevel";
 
         for (int i = 1; i <= enabledAlgorithams; i++)
@@ -77,6 +79,48 @@ public class GenerateMap : MonoBehaviour
 
 
     }
+
+    private void PlayNextLevel()
+    { }
+
+    private void addNextRunner()
+    {
+        //print("Next runner added");
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
+
+        Player nextPlayer = null;
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            nextPlayer = players[i].GetComponent<Player>();
+
+            if (players[i].transform.name.Equals("Player")) continue;
+
+            if (!nextPlayer.playMode)
+            {
+                break;
+            }
+        }
+
+        GameObject startNode = GameObject.Find("node ("+this.Xstart+","+this.Ystart+")");
+        GameObject endNode = GameObject.Find("node (" + this.Xend + "," + this.Yend + ")");
+
+        if (nextPlayer != null)
+        {
+            nextPlayer.playMode = true;
+            nextPlayer.playerStep = startNode.transform.name;
+            List<Transform> transformPath = nextPlayer.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform);
+            List<string> path = new List<string>();
+
+            foreach (Transform node in transformPath)
+                path.Add(node.name);
+
+            nextPlayer.playerPath = path;
+        }
+    }
+
+
 
     /// <summary>
     /// Generate the grid with the nodes.
@@ -185,11 +229,11 @@ public class GenerateMap : MonoBehaviour
         if (InputYStart != null && !System.String.IsNullOrEmpty(InputYStart.GetComponent<InputField>().text))
             this.Ystart = System.Int32.Parse(InputYStart.GetComponent<InputField>().text);
 
-        if(this.Xstart >= 0 && this.Ystart >= 0)
+        if (this.Xstart >= 0 && this.Ystart >= 0)
         {
-            GameObject newNodeStart = GameObject.Find("node ("+this.Xstart+","+this.Ystart+")");
+            GameObject newNodeStart = GameObject.Find("node (" + this.Xstart + "," + this.Ystart + ")");
 
-           this.startButton.position = newNodeStart.transform.position;
+            this.startButton.position = newNodeStart.transform.position;
         }
 
     }

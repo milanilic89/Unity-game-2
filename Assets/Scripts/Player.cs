@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     public string playerStep = "node (1,4)";
     //    private List<string> playerPath = new List<string>() { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)" , "node (9,0)", "node (9,1)" };
 
-    private List<string> playerPath = new List<string>() { }; // { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)", };
+    public List<string> playerPath = new List<string>() { }; // { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)", };
     private List<string> blockPath = new List<string>() { }; // { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)", };
 
     public int replayLevel = 0;
@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
-        if (playMode)
+        if (this.playMode)
         {
             RunPlayer();
         }
@@ -157,8 +157,37 @@ public class Player : MonoBehaviour
 
     private void RunPlayer()
     {
-        print(this.transform.name + " is moving...");
+        print("Runner " + this.transform.name + " is moving...");
+
+        //this.printPath();
+        //this.colorPath();
+        this.RunPath();
+
+        if (this.playerStep.Equals(this.playerPath.Last()))
+        {
+            print(this.transform.name + " is in FINISH");
+            this.playMode = false;
+        }
+
     }
+
+    private void RunPath()
+    {
+        TriggerPlay(this.playerPath);
+    }
+
+    public void printPath()
+    {
+        foreach (string node in this.playerPath)
+            print(node);
+    }
+
+    public void colorPath()
+    {
+        foreach (string node in this.playerPath)
+            GameObject.Find(node).GetComponent<Image>().color = Color.red;
+    }
+    
 
     private void transformToStart()
     {
@@ -284,6 +313,17 @@ public class Player : MonoBehaviour
     }
 
     public void TriggerReplay(int level, List<string> _path)
+    {
+        for (int i = 0; i < _path.Count - 1; i++)
+        {
+            if (this.playerStep.Equals(_path[i]))
+            {
+                MovePlayerVisual(this.playerStep, _path[i + 1]);
+            }
+        }
+    }
+
+    public void TriggerPlay(List<string> _path)
     {
         for (int i = 0; i < _path.Count - 1; i++)
         {
@@ -541,14 +581,24 @@ public class Player : MonoBehaviour
         GameObject start = GameObject.Find(startNode);
         GameObject end = GameObject.Find(endNode);
 
+
+        print("zaglavio na start " + startNode + " end " + endNode);
+
         if (startNode.Equals(endNode)) return;
 
-        if (!this.playerStep.Equals(startNode))
+        print("1 zaglavio na start " + startNode + " end " + endNode);
+
+        print("### player step " + this.playerStep + " start node " + startNode);
+
+        if (!this.playerStep.Equals(startNode)) // || this.playerStep.Equals(this.playerPath.FirstOrDefault()))
         {
+            print("2 zaglavio na start " + startNode + " end " + endNode);
+
             this.playerStep = endNode;
             return;
         }
 
+        print("3 zaglavio na start " + startNode + " end " + endNode);
 
         if (start != null && end != null)
         {
@@ -598,7 +648,9 @@ public class Player : MonoBehaviour
 
     private void movePlayerToNode(Direction direction, Transform target)
     {
-        float speed = 0.5f;
+        float speed = 1.5f;
+
+        print("direction: " + direction);
 
         //print("player cordinates x= " + this.transform.position.x + " , y= " + this.transform.position.y);
         //print("target cordinates x= " + target.position.x + " , y= " + target.position.y);
@@ -626,14 +678,16 @@ public class Player : MonoBehaviour
                 this.transform.Translate(0, -speed, 0, Space.World);
         }
 
-        //print("player cordinates x= " + this.transform.position.x + " , y= " + this.transform.position.y);
-        //print("target cordinates x= " + target.position.x + " , y= " + target.position.y);
-        //print("diff x " + diff_x + "diff y " + diff_y);
+        print("player cordinates x= " + this.transform.position.x + " , y= " + this.transform.position.y);
+        print("target cordinates x= " + target.position.x + " , y= " + target.position.y);
+        print("diff x " + diff_x + "diff y " + diff_y);
+        print(target.name);
 
-        if (diff_x == 0 && diff_y == 0)
-            //this.playerStep = "player moved one step";
+        if (diff_x == 0 && diff_y == 0 || (diff_x == 1 && diff_y == 0) || (diff_x == 0 && diff_y == 1))
+        {
+            print("player moved one step");
             this.playerStep = target.name;
-
+        }
     }
 
 }

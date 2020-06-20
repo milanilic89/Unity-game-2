@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 868785266514496610}
   - component: {fileID: 6948313673351097361}
   - component: {fileID: 1747090719809844537}
+  - component: {fileID: 3278048266900958467}
   m_Layer: 5
   m_Name: player1
   m_TagString: player
@@ -38,8 +39,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 25, y: 1}
-  m_SizeDelta: {x: 49, y: 49}
+  m_AnchoredPosition: {x: 23.5, y: -15}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5066468044851164767
 CanvasRenderer:
@@ -146,11 +147,13 @@ MonoBehaviour:
   playerSpeed: 4
   replayMode: 0
   moveToStart: 0
+  playMode: 0
   startNode: {fileID: 0}
   endNode: {fileID: 0}
   levels: []
   levelField: {fileID: 0}
   playerStep: node (1,4)
+  playerPath: []
   replayLevel: 0
 --- !u!114 &1747090719809844537
 MonoBehaviour:
@@ -167,3 +170,15 @@ MonoBehaviour:
   level: 0
   blockPath: []
   movePath: []
+--- !u!114 &3278048266900958467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4404318774949475732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0ec766b8452c6a449aa1f30923b68a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
