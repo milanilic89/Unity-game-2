@@ -143,8 +143,8 @@ public class PlayerInput : MonoBehaviour
             this.player.paths = paths;
 
             // add level after play
-            Level l = new Level(this.player.level, blockPath, this.player.paths);
-            this.player.levels.Add(l);
+     //       Level l = new Level(this.player.level, blockPath, this.player.paths);
+       //     this.player.levels.Add(l);
 
 
         }

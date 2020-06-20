@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
     public Transform startNode = null;
     public Transform endNode = null;
 
+    public string algoName;
+
     //public List<Level> levelsHistory = new List<Level>();
 
     public List<Level> levels = new List<Level>();
@@ -73,7 +75,20 @@ public class Player : MonoBehaviour
         print("levels saved: " + this.levels.Count);
         foreach (Level l in this.levels)
         {
-            print("::level:: " + l.level + " :: blocks :: " + l.blockPath.Count + " :: moves :: " + l.movePath.Count + " :: ");
+            print("::level:: " + l.level + " :: blocks :: " + l.blockPath.Count + " :: moves :: " + l.movePath.Count + " :: algo name ::" + l.algoName);
+        }
+    }
+
+    public void ListLevels(int ind)
+    {
+        foreach (Level level in this.levels)
+        {
+            if (level.level == ind)
+            {
+                print("List Level " + level.level + "number of blocks " + level.blockPath.Count + "path algoritam " + level.movePath.Count + " alogritam " + level.algoName);
+
+                break;
+            }
         }
     }
 
@@ -494,21 +509,6 @@ public class Player : MonoBehaviour
         this.Move();
     }
 
-    public void ListLevels(int ind)
-    {
-        ////ind = 1; // level
-
-        //foreach (Level level in this.levelsHistory)
-        //{
-        //    if (level.level == ind)
-        //    {
-        //        print("List Level " + level.level + "number of blocks " + level.blockPath.Count + "path algoritam " + level.movePath.Count);
-
-        //        break;
-        //    }
-        //}
-    }
-
     // set Replay mode On/Off
     public void SetReplay()
     {
@@ -538,8 +538,8 @@ public class Player : MonoBehaviour
             {
                 if (_level.level == this.replayLevel)
                 {
-                    foreach (Transform node in _level.movePath)
-                        this.playerPath.Add(node.name);
+                    //foreach (Transform node in _level.movePath)
+                    //    this.playerPath.Add(node.name);
 
                     foreach (Transform node in _level.blockPath)
                         this.blockPath.Add(node.name);

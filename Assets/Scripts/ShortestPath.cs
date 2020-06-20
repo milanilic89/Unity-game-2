@@ -7,6 +7,11 @@ public class ShortestPath : MonoBehaviour
 {
     private GameObject[] nodes;
 
+    // ScreenData
+    public string algorithmName;
+    public int checkedNodesCount;
+    public double timeSpent;
+
     /// <summary>
     /// Finding the shortest path and return in a List
     /// </summary>

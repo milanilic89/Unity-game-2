@@ -33,6 +33,11 @@ public class GenerateMap : MonoBehaviour
     public List<Transform> grid = new List<Transform>();
     public List<Transform> blockNodes = new List<Transform>();
 
+    public Transform dataScreenPrefab;
+    public Transform dataScreenTextPrefab;
+    public Transform dataScreenReplayPrefab;
+
+
     #endregion
 
     // Map initialization
@@ -47,15 +52,11 @@ public class GenerateMap : MonoBehaviour
     {
         if (autoMode)
         {
-            print("automode on");
             PlayNextLevel();
         }
-        else
-            print("automode off");
 
         if (this.gameStop)
         {
-            print("Game over:-stop all players");
             StopAllPlayers();
         }
     }
@@ -100,16 +101,46 @@ public class GenerateMap : MonoBehaviour
         endButton.GetComponent<Button>().onClick.AddListener(delegate { PlayNextLevel(); });
         endButton.name = "playNewLevel";
 
-        for (int i = 1; i <= enabledAlgorithams; i++)
+        bool algo1 = GameObject.Find("Algo1").GetComponent<Toggle>().isOn;
+        bool algo2 = GameObject.Find("Algo2").GetComponent<Toggle>().isOn;
+        bool algo3 = GameObject.Find("Algo3").GetComponent<Toggle>().isOn;
+
+        //for (int i = 1; i <= enabledAlgorithams; i++)
+        //{
+        //    Color randomColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
+        //    Transform player = Instantiate(playerPrefab, startButton);
+        //    player.name = "player" + i;
+        //    player.GetComponent<Image>().color = i == enabledAlgorithams ? Color.white : randomColor;            
+        //}
+
+        if (algo1)
+        {
+            Transform player = Instantiate(playerPrefab, startButton);
+            player.name = "player" + 1;
+            player.GetComponent<Image>().color = Color.white;
+            player.GetComponent<Player>().algoName = "Dijkstra's algorithm";
+        }
+
+        if (algo2)
         {
             Color randomColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
 
             Transform player = Instantiate(playerPrefab, startButton);
-            player.name = "player" + i;
-            player.GetComponent<Image>().color = i == enabledAlgorithams ? Color.white : randomColor;
-            //player.GetComponent<Image>().color = randomColor;
+            player.name = "player" + 2;
+            player.GetComponent<Image>().color = randomColor;
+            player.GetComponent<Player>().algoName = "BFS traversal";
         }
 
+        if (algo3)
+        {
+            Color randomColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
+            Transform player = Instantiate(playerPrefab, startButton);
+            player.name = "player" + 3;
+            player.GetComponent<Image>().color = randomColor;
+            player.GetComponent<Player>().algoName = "DFS traversal";
+        }
 
     }
 
@@ -124,6 +155,8 @@ public class GenerateMap : MonoBehaviour
             // or game over
             addNewBlockNode();
 
+            CreateDataScreen();
+
             // play new level - visual
             playNewLevel();
         }
@@ -137,6 +170,7 @@ public class GenerateMap : MonoBehaviour
             if (player.GetComponent<Player>().level != this.gameLevel) return false;
 
         this.gameLevel += 1;
+
         return true;
     }
 
@@ -150,6 +184,50 @@ public class GenerateMap : MonoBehaviour
             player.GetComponent<Player>().playMode = false;
             player.transform.position = endNode.transform.position;
         }
+    }
+
+    private void CreateDataScreen()
+    {
+        GameObject dataScreenRoot = GameObject.Find("DataScreenContent");
+
+        int level = this.gameLevel - 1;
+
+        Transform newButtonLevel = Instantiate(dataScreenPrefab, dataScreenRoot.transform);
+        newButtonLevel.name = "GameLevel" + level;
+        newButtonLevel.GetComponent<Button>().GetComponentInChildren<Text>().text = "Level " + level;
+
+        newButtonLevel.GetComponent<Button>().onClick.AddListener(delegate { showLevelDataScreen(level); });
+
+    }
+
+    private void showLevelDataScreen(int level)
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
+
+        GameObject player1 = GameObject.Find("player1");
+
+        Player player = player1.GetComponent<Player>();
+
+        player.ListLevels(level);
+
+        ShowDataScreen();
+    }
+
+    private void ShowDataScreen()
+    {
+        GameObject dataScreenWindow = GameObject.Find("DataScreenWindow");
+
+        if (dataScreenWindow != null)
+        {
+            Transform replayLevelButton = Instantiate(dataScreenReplayPrefab, dataScreenWindow.transform);
+            replayLevelButton.GetComponent<Button>().onClick.AddListener(delegate { replayLevel(2); });
+        }
+
+    }
+
+    private void replayLevel(int level)
+    {
+        print("replaying level " + level);
     }
 
     private void addNewBlockNode()
@@ -212,6 +290,9 @@ public class GenerateMap : MonoBehaviour
 
             player.playerPath = path;
             player.moving = true;
+
+            Level level = new Level(player.level, this.blockNodes, player.playerPath, player.algoName);
+            player.levels.Add(level);
         }
     }
 
