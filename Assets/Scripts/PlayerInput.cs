@@ -31,19 +31,56 @@ public class PlayerInput : MonoBehaviour
 
     private Dictionary<int, string> sceneLevel = new Dictionary<int, string>();
 
+    void Start()
+    {
+        StartAndEnd_Init();
+    }
+
     // Update is called once per frame
     void Update()
     {
-
         SetDefaultNodes();
-        //setStartCordinates();
-        //setEndCordinates();
+    }
 
-        //if (this.player != null && this.player.autorun)
-        //{
-        //    print("Player status " + this.player.currentNode);
-        //    //this.btnFindPath();
-        //}
+    private void StartAndEnd_Init()
+    {
+        GameObject startButton = GameObject.Find("startRunner");
+
+        if (startButton != null)
+        {
+            Button startRunButton = startButton.GetComponent<Button>();
+            startRunButton.onClick.AddListener(delegate { addNextRunner(); });
+        }
+
+        GameObject endButton = GameObject.Find("playNewLevel");
+
+        if (endButton != null)
+        {
+            Button playNewLevelButton = endButton.GetComponent<Button>();
+            playNewLevelButton.onClick.AddListener(delegate { PlayNextLevel(); });
+        }
+
+    }
+
+    private void addNextRunner()
+    {
+        print("Next runner added");
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
+
+        foreach (GameObject _player in players)
+        {
+            Player nextPlayer = _player.GetComponent<Player>();
+
+            if (nextPlayer != null && !nextPlayer.playMode)
+            {
+                print(nextPlayer.transform.name + " has been added and RUN started");
+                _player.transform.Translate(100f, 0, 0, Space.World);
+
+                nextPlayer.playMode = true;
+            }
+        }
+
     }
 
     ///// <summary>
@@ -149,54 +186,9 @@ public class PlayerInput : MonoBehaviour
             Level l = new Level(this.player.level, blockPath, this.player.paths);
             this.player.levels.Add(l);
 
-            //print("level(N): " + this.player.levels.Count);
-            //print("::level:: " + l.level + " :: blocks :: " + l.blockPath.Count + " :: moves :: " + l.movePath.Count + " :: ");
 
         }
     }
-
-    //private void SetLatestBlockPath()
-    //{
-    //    GameObject[] players = GameObject.FindGameObjectsWithTag("player");
-
-    //    Player player = players[0].GetComponent<Player>();
-
-    //    if (player != null)
-    //    {
-    //        this.player = player;
-                        
-    //        ClearBlockPathsAndSetNewOne(lastlevel.blockPath);
-
-    //        this.blockPath = lastlevel.blockPath;
-    //    }
-    //}
-
-
-    //public void RepalyAnyLevel(int replayLevel)
-    //{
-    //    this.player.replayMode = true;
-
-    //    if (this.InputFieldLevel != null)
-    //        replayLevel = int.Parse(this.InputFieldLevel.text);
-
-    //    foreach (Level level in this.player.levels)
-    //    {
-    //        if (level.level == replayLevel)
-    //        {
-    //            ClearBlockPathsAndSetNewOne(level.blockPath);
-
-    //            this.player.reset();
-
-    //            this.blockPath = level.blockPath;
-
-    //            this.player.paths = level.movePath;
-
-
-
-    //            break;
-    //        }
-    //    }
-    //}
 
 
     void ClearBlockPathsAndSetNewOne(List<Transform> blocks)
@@ -225,13 +217,15 @@ public class PlayerInput : MonoBehaviour
 
     public void LoadPlayScene()
     {
-        SceneManager.LoadScene("RunAndPlay", LoadSceneMode.Additive);
+        GameObject map = GameObject.Find("Map");
 
-        //btnStartNode();
-        //btnEndNode();
-
-        //GameObject startButton = GameObject.Find("btnStart");
-        //startButton.GetComponent<Button>().interactable = false;        
+        if (map == null)
+            SceneManager.LoadScene("RunAndPlay", LoadSceneMode.Additive);
+        else
+        {
+            // run game
+            btnFindPath();
+        }
     }
 
     public void SetDefaultNodes()
@@ -272,33 +266,6 @@ public class PlayerInput : MonoBehaviour
         Application.Quit();
     }
 
-    public void movePlayer(List<Transform> paths)
-    {
-        //foreach (Transform path in paths)
-        //{
-        //    Vector2 newpos = path.position;
-        //    playerPrefab.position = newpos;
-        //}
-    }
-
-    public void InsertNewPlayer()
-    {
-        //print("New player is in the game!");
-
-        //playerPrefab.postion = 
-
-        //for (int i = 0; i < 10; i++)
-        //{
-        //    Instantiate(playerPrefab, new Vector3(i * 2.0F, 0, 0), Quaternion.identity);
-        //}
-
-        node = Instantiate(playerPrefab, startNode);
-        node.name = "player";
-        node.tag = "player";
-        node.position = startNode.position;
-
-    }
-
 
     public void btnBlockPath()
     {
@@ -326,7 +293,8 @@ public class PlayerInput : MonoBehaviour
             }
         }
 
-        this.player.IncreaseLevel();
+        if (this.player != null)
+            this.player.IncreaseLevel();
 
     }
 
@@ -557,44 +525,6 @@ public class PlayerInput : MonoBehaviour
     }
 
     /// <summary>
-    /// Mouse click.
-    /// </summary>
-    private void mouseInput()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-
-            // Update colors for every mouse clicked.
-            this.colorBlockPath();
-            this.updateNodeColor();
-
-            // Get the raycast from the mouse position from screen.
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Node")
-            {
-                //unmark previous
-                Renderer rend;
-                if (node != null)
-                {
-                    rend = node.GetComponent<Renderer>();
-                    rend.material.color = Color.white;
-                }
-
-                // We now update the selected node.
-                node = hit.transform;
-
-                // Mark it
-                rend = node.GetComponent<Renderer>();
-                rend.material.color = Color.green;
-
-            }
-        }
-    }
-
-
-    /// <summary>
     /// Refresh Update Nodes Color.
     /// </summary>
     private void updateNodeColor()
@@ -661,38 +591,10 @@ public class PlayerInput : MonoBehaviour
         PlayerPrefs.SetString("ReplayRun", "true");
     }
 
-    public void btnColorPath()
-    {
-        if (this.colorPath)
-            this.colorPath = false;
-        else this.colorPath = true;
-    }
-
     public void PlayNextLevel()
     {
-        saveScene();
-
-        //btnBlockPath();
-
         btnFindPath();
     }
-
-    public void saveScene()
-    {
-        //print("Scena sacuvana");
-
-        //Scene newScene = SceneManager.CreateScene("My New Scene-level-"+this.player.level);
-
-        //this.sceneLevel.Add(this.player.level, newScene.name);
-
-        ////this.sceneLevel.Add(this.player.level, SceneManager.GetActiveScene().buildIndex);
-
-        ////if (this.levelScene != null)
-        ////    SceneManager.LoadScene(this.levelScene);
-        //print("saved level scene count:" + this.sceneLevel.Count);
-
-    }
-
 
     public void AutoRun()
     {
@@ -702,5 +604,4 @@ public class PlayerInput : MonoBehaviour
         this.player = players[0].GetComponent<Player>();
         this.player.autorun = !this.player.autorun;
     }
-
 }

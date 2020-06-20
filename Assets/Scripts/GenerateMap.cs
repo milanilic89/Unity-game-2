@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GenerateMap : MonoBehaviour
 {
@@ -12,7 +14,15 @@ public class GenerateMap : MonoBehaviour
 
     public int Xstart = 0, Ystart = 4;
     public int Xend = 9, Yend = 4;
+    
+    private Transform startButton;
+    private Transform endButton;
 
+    public Transform startPrefab;
+    public Transform endPrefab;
+    public Transform playerPrefab;
+
+    public int enabledAlgorithams = 3;
 
     public List<Transform> grid = new List<Transform>();
 
@@ -21,6 +31,7 @@ public class GenerateMap : MonoBehaviour
     {
         this.generateGrid();
         this.generateNeighbours();
+
     }
 
     /// <summary>
@@ -34,16 +45,59 @@ public class GenerateMap : MonoBehaviour
             {
                 int randomPrefab = Random.Range(0, 2);
                 Transform node = randomPrefab == 0 ? Instantiate(nodePrefab1, transform) : Instantiate(nodePrefab2, transform);
-                
+
                 node.name = "node (" + i + "," + j + ")";
 
                 node.GetComponent<Node>().x = i;
                 node.GetComponent<Node>().y = j;
-                
+
                 node.tag = "node";
 
                 grid.Add(node);
+            }
+        }
 
+        GameObject canvas = GameObject.Find("RunCanvas");
+
+
+        startButton = Instantiate(startPrefab, canvas.transform);
+        startButton.name = "startRunner";
+        endButton = Instantiate(endPrefab, canvas.transform);
+        endButton.name = "playNewLevel";
+
+        for (int i = 1; i <= enabledAlgorithams; i++)
+        {
+            Color randomColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
+            Transform player = Instantiate(playerPrefab, startButton);
+            player.name = "player" + i;
+            player.GetComponent<Image>().color = i == enabledAlgorithams ? Color.white : randomColor;
+            //player.GetComponent<Image>().color = randomColor;
+        }
+
+
+    }
+
+    /// <summary>
+    /// Generate the grid with the nodes.
+    /// </summary>
+    public void generateMapOnly()
+    {
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < column; j++)
+            {
+                int randomPrefab = Random.Range(0, 2);
+                Transform node = randomPrefab == 0 ? Instantiate(nodePrefab1, transform) : Instantiate(nodePrefab2, transform);
+
+                node.name = "node (" + i + "," + j + ")";
+
+                node.GetComponent<Node>().x = i;
+                node.GetComponent<Node>().y = j;
+
+                node.tag = "node";
+
+                grid.Add(node);
             }
         }
     }
@@ -115,5 +169,82 @@ public class GenerateMap : MonoBehaviour
     public void removeGrid()
     {
         this.grid.Clear();
+    }
+
+    /// <summary>
+    /// Set new position for Start button
+    /// </summary>
+    public void SetNewStart()
+    {
+        GameObject InputXStart = GameObject.Find("InputXStart");
+        GameObject InputYStart = GameObject.Find("InputYStart");
+
+        if (InputXStart != null && !System.String.IsNullOrEmpty(InputXStart.GetComponent<InputField>().text))
+            this.Xstart = System.Int32.Parse(InputXStart.GetComponent<InputField>().text);
+
+        if (InputYStart != null && !System.String.IsNullOrEmpty(InputYStart.GetComponent<InputField>().text))
+            this.Ystart = System.Int32.Parse(InputYStart.GetComponent<InputField>().text);
+
+        if(this.Xstart >= 0 && this.Ystart >= 0)
+        {
+            GameObject newNodeStart = GameObject.Find("node ("+this.Xstart+","+this.Ystart+")");
+
+           this.startButton.position = newNodeStart.transform.position;
+        }
+
+    }
+
+    /// <summary>
+    /// Set new position for End button
+    /// </summary>
+    public void SetNewEnd()
+    {
+        GameObject InputXEnd = GameObject.Find("InputXEnd");
+        GameObject InputYEnd = GameObject.Find("InputYEnd");
+
+        if (InputXEnd != null && !System.String.IsNullOrEmpty(InputXEnd.GetComponent<InputField>().text))
+            this.Xend = System.Int32.Parse(InputXEnd.GetComponent<InputField>().text);
+
+        if (InputYEnd != null && !System.String.IsNullOrEmpty(InputYEnd.GetComponent<InputField>().text))
+            this.Yend = System.Int32.Parse(InputYEnd.GetComponent<InputField>().text);
+
+        if (this.Xend >= 0 && this.Yend >= 0)
+        {
+            GameObject newNodeEnd = GameObject.Find("node (" + this.Xend + "," + this.Yend + ")");
+
+            this.endButton.position = newNodeEnd.transform.position;
+        }
+    }
+
+    /// <summary>
+    /// Generate new Map for Row and Column input
+    /// </summary>
+    public void resizeMap()
+    {
+        //this.row = 10;
+        //this.column = 10;
+
+        GameObject inputRow = GameObject.Find("InputRow");
+        GameObject inputColumn = GameObject.Find("InputColumn");
+
+        if (inputRow != null && !System.String.IsNullOrEmpty(inputRow.GetComponent<InputField>().text))
+            this.row = System.Int32.Parse(inputRow.GetComponent<InputField>().text);
+        if (inputColumn != null && !System.String.IsNullOrEmpty(inputColumn.GetComponent<InputField>().text))
+            this.column = System.Int32.Parse(inputColumn.GetComponent<InputField>().text);
+
+        GameObject map = GameObject.Find("Map");
+
+        if (map != null)
+        {
+            foreach (Transform child in map.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+
+
+        this.removeGrid();
+        this.generateMapOnly();
+        this.generateNeighbours();
     }
 }

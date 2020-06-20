@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     public int playerSpeed = 4;
     public bool replayMode = false;
     public bool moveToStart = false;
-
+    public bool playMode = false;
 
     public Transform startNode = null;
     public Transform endNode = null;
@@ -116,35 +116,48 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
-        if (replayMode)
+        if (playMode)
         {
-            if (moveToStart)
-            {
-                moveToStart = false;
-                transformToStart();
-            }
-
-            TriggerReplay(this.replayLevel, this.playerPath);
-
-            if (this.playerStep.Equals(this.playerPath.Last()))
-                replayMode = false;
+            RunPlayer();
         }
         else
         {
-            // play mode
-            //LoadPlayer();
 
-
-            if (!stop)
-                Move();
-
-            if (this.level > 1 && this.stop)
+            if (replayMode)
             {
-                GameObject _textLevelGameObject = GameObject.Find("TextLevel");
+                if (moveToStart)
+                {
+                    moveToStart = false;
+                    transformToStart();
+                }
 
-                _textLevelGameObject.GetComponent<Text>().text = "GAME OVER";
+                TriggerReplay(this.replayLevel, this.playerPath);
+
+                if (this.playerStep.Equals(this.playerPath.Last()))
+                    replayMode = false;
+            }
+            else
+            {
+                // play mode
+                //LoadPlayer();
+
+
+                if (!stop)
+                    Move();
+
+                if (this.level > 1 && this.stop)
+                {
+                    GameObject _textLevelGameObject = GameObject.Find("TextLevel");
+
+                    _textLevelGameObject.GetComponent<Text>().text = "GAME OVER";
+                }
             }
         }
+    }
+
+    private void RunPlayer()
+    {
+        print(this.transform.name + " is moving...");
     }
 
     private void transformToStart()
