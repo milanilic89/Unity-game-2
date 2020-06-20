@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     public bool replayMode = false;
     public bool moveToStart = false;
     public bool playMode = false;
+    public bool moving = false;
 
     public Transform startNode = null;
     public Transform endNode = null;
@@ -62,7 +63,7 @@ public class Player : MonoBehaviour
 
     public void Start()
     {
-        this.level = 1;
+        //this.level = 1;
 
         //SavePlayer();
     }
@@ -120,44 +121,44 @@ public class Player : MonoBehaviour
         {
             RunPlayer();
         }
-        else
-        {
+        //else
+        //{
 
-            if (replayMode)
-            {
-                if (moveToStart)
-                {
-                    moveToStart = false;
-                    transformToStart();
-                }
+        //    if (replayMode)
+        //    {
+        //        if (moveToStart)
+        //        {
+        //            moveToStart = false;
+        //            transformToStart();
+        //        }
 
-                TriggerReplay(this.replayLevel, this.playerPath);
+        //        TriggerReplay(this.replayLevel, this.playerPath);
 
-                if (this.playerStep.Equals(this.playerPath.Last()))
-                    replayMode = false;
-            }
-            else
-            {
-                // play mode
-                //LoadPlayer();
+        //        if (this.playerStep.Equals(this.playerPath.Last()))
+        //            replayMode = false;
+        //    }
+        //    else
+        //    {
+        //        // play mode
+        //        //LoadPlayer();
 
 
-                if (!stop)
-                    Move();
+        //        if (!stop)
+        //            Move();
 
-                if (this.level > 1 && this.stop)
-                {
-                    GameObject _textLevelGameObject = GameObject.Find("TextLevel");
+        //        if (this.level > 1 && this.stop)
+        //        {
+        //            GameObject _textLevelGameObject = GameObject.Find("TextLevel");
 
-                    _textLevelGameObject.GetComponent<Text>().text = "GAME OVER";
-                }
-            }
-        }
+        //            _textLevelGameObject.GetComponent<Text>().text = "GAME OVER";
+        //        }
+        //    }
+        //}
     }
 
     private void RunPlayer()
     {
-        print("Runner " + this.transform.name + " is moving...");
+        //print("Runner " + this.transform.name + " is moving...");
 
         //this.printPath();
         //this.colorPath();
@@ -165,8 +166,8 @@ public class Player : MonoBehaviour
 
         if (this.playerStep.Equals(this.playerPath.Last()))
         {
-            print(this.transform.name + " is in FINISH");
-            this.playMode = false;
+            //print(this.transform.name + " is in FINISH");
+            this.moving = false;
         }
 
     }
@@ -581,24 +582,13 @@ public class Player : MonoBehaviour
         GameObject start = GameObject.Find(startNode);
         GameObject end = GameObject.Find(endNode);
 
-
-        print("zaglavio na start " + startNode + " end " + endNode);
-
         if (startNode.Equals(endNode)) return;
 
-        print("1 zaglavio na start " + startNode + " end " + endNode);
-
-        print("### player step " + this.playerStep + " start node " + startNode);
-
-        if (!this.playerStep.Equals(startNode)) // || this.playerStep.Equals(this.playerPath.FirstOrDefault()))
+        if (!this.playerStep.Equals(startNode)) 
         {
-            print("2 zaglavio na start " + startNode + " end " + endNode);
-
             this.playerStep = endNode;
             return;
         }
-
-        print("3 zaglavio na start " + startNode + " end " + endNode);
 
         if (start != null && end != null)
         {
@@ -650,15 +640,10 @@ public class Player : MonoBehaviour
     {
         float speed = 1.5f;
 
-        print("direction: " + direction);
-
-        //print("player cordinates x= " + this.transform.position.x + " , y= " + this.transform.position.y);
-        //print("target cordinates x= " + target.position.x + " , y= " + target.position.y);
-
         int diff_x = (int)System.Math.Abs((this.transform.position.x - target.position.x));
         int diff_y = (int)System.Math.Abs((this.transform.position.y - target.position.y));
 
-        // levo desno
+        // right/left
         if (diff_x > 0)
         {
             if (this.transform.position.x < target.position.x && direction == Direction.Right)
@@ -668,7 +653,7 @@ public class Player : MonoBehaviour
                 this.transform.Translate(-speed, 0, 0, Space.World);
         }
 
-        // gore dole
+        // top/bottom
         if (diff_y > 0)
         {
             if (this.transform.position.y < target.position.y && direction == Direction.Top)
@@ -678,14 +663,8 @@ public class Player : MonoBehaviour
                 this.transform.Translate(0, -speed, 0, Space.World);
         }
 
-        print("player cordinates x= " + this.transform.position.x + " , y= " + this.transform.position.y);
-        print("target cordinates x= " + target.position.x + " , y= " + target.position.y);
-        print("diff x " + diff_x + "diff y " + diff_y);
-        print(target.name);
-
         if (diff_x == 0 && diff_y == 0 || (diff_x == 1 && diff_y == 0) || (diff_x == 0 && diff_y == 1))
         {
-            print("player moved one step");
             this.playerStep = target.name;
         }
     }

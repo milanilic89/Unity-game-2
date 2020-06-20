@@ -106,7 +106,7 @@ public class GenerateMap : MonoBehaviour
         GameObject startNode = GameObject.Find("node ("+this.Xstart+","+this.Ystart+")");
         GameObject endNode = GameObject.Find("node (" + this.Xend + "," + this.Yend + ")");
 
-        if (nextPlayer != null)
+        if (nextPlayer != null && !nextPlayer.playMode)
         {
             nextPlayer.playMode = true;
             nextPlayer.playerStep = startNode.transform.name;
@@ -117,7 +117,9 @@ public class GenerateMap : MonoBehaviour
                 path.Add(node.name);
 
             nextPlayer.playerPath = path;
+            nextPlayer.moving = true;
         }
+
     }
 
 
