@@ -219,8 +219,25 @@ public class GenerateMap : MonoBehaviour
 
         if (dataScreenWindow != null)
         {
+            // destroy previous level data and add new
+            foreach (Transform child in dataScreenWindow.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+
+            Transform alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
+            alogNameText.GetComponent<Text>().text = "Name Ta-ha!!!!!!!!!!";
+
+            alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
+            alogNameText.GetComponent<Text>().text = "Count Ta-ha!!!!!!!!!!";
+
+            alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
+            alogNameText.GetComponent<Text>().text = "Time Ta-ha!!!!!!!!!!";
+
             Transform replayLevelButton = Instantiate(dataScreenReplayPrefab, dataScreenWindow.transform);
             replayLevelButton.GetComponent<Button>().onClick.AddListener(delegate { replayLevel(2); });
+
+
         }
 
     }
