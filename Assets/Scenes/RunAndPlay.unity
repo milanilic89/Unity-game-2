@@ -343,8 +343,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: AutoRun
+      - m_Target: {fileID: 1359964276}
+        m_MethodName: SetAutoRun
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2263,7 +2263,9 @@ MonoBehaviour:
   playerPrefab: {fileID: 2462591850063793802, guid: 102e81083ca11bc44afeab800f624530,
     type: 3}
   enabledAlgorithams: 3
+  gameLevel: 2
   grid: []
+  blockNodes: []
 --- !u!114 &1359964277
 MonoBehaviour:
   m_ObjectHideFlags: 0

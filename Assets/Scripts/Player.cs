@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 
     public bool stop = false;
     public int level = 1;
-    public int playerSpeed = 4;
+    public int playerSpeed = 1;
     public bool replayMode = false;
     public bool moveToStart = false;
     public bool playMode = false;
@@ -79,10 +79,28 @@ public class Player : MonoBehaviour
 
     public void IncreaseLevel()
     {
-        this.level += 1;
+        //if (!anyPlayerMoving())
+        //{
+            this.level += 1;
+            UpdateLevelInfo();
+        //}
 
-        UpdateLevelInfo();
+    }
 
+    private bool anyPlayerMoving()
+    {
+        bool result = false;
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            Player player = players[i].GetComponent<Player>();
+
+            if (player.moving) result = true;
+        }
+
+        return result;
     }
 
     private List<Transform> getBlackNodes()
@@ -167,7 +185,10 @@ public class Player : MonoBehaviour
         if (this.playerStep.Equals(this.playerPath.Last()))
         {
             //print(this.transform.name + " is in FINISH");
+            if (this.moving) this.IncreaseLevel();
+
             this.moving = false;
+
         }
 
     }
@@ -188,7 +209,7 @@ public class Player : MonoBehaviour
         foreach (string node in this.playerPath)
             GameObject.Find(node).GetComponent<Image>().color = Color.red;
     }
-    
+
 
     private void transformToStart()
     {
@@ -584,7 +605,7 @@ public class Player : MonoBehaviour
 
         if (startNode.Equals(endNode)) return;
 
-        if (!this.playerStep.Equals(startNode)) 
+        if (!this.playerStep.Equals(startNode))
         {
             this.playerStep = endNode;
             return;
@@ -639,6 +660,9 @@ public class Player : MonoBehaviour
     private void movePlayerToNode(Direction direction, Transform target)
     {
         float speed = 1.5f;
+
+        if (this.transform.name == "player1")  speed = 1f;
+        if (this.transform.name == "player3") speed = 2f;
 
         int diff_x = (int)System.Math.Abs((this.transform.position.x - target.position.x));
         int diff_y = (int)System.Math.Abs((this.transform.position.y - target.position.y));

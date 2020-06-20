@@ -138,11 +138,41 @@ public class Node : MonoBehaviour
     /// Set start node
     /// </summary>
     /// <returns>boolean</returns>
-    public void SetStart()
+    public void ResetStart()
     {
+        GameObject[] mapNodes = GameObject.FindGameObjectsWithTag("node");
+
+        foreach (GameObject mapNode in mapNodes)
+        {
+            Node node = mapNode.GetComponent<Node>();
+            if (node.isStart)
+            {
+                node.isStart = false;
+                //this.walkable = true;
+            }
+        }
+
         this.isStart = true;
+        //this.walkable = false;
     }
 
+    public void ResetEnd()
+    {
+        GameObject[] mapNodes = GameObject.FindGameObjectsWithTag("node");
+
+        foreach (GameObject mapNode in mapNodes)
+        {
+            Node node = mapNode.GetComponent<Node>();
+            if (node.isEnd)
+            {
+                node.isEnd = false;
+                //this.walkable = true;
+            }
+        }
+
+        this.isEnd = true;
+        //this.walkable = false;
+    }
 
 
 
