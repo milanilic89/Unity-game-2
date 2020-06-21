@@ -8,17 +8,30 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    #region Player properties
+
     public string algoName;
-    public bool stop = false;
     public int level = 1;
     public bool replayMode = false;
     public bool playMode = false;
     public bool moving = false;
+    public bool stop = false;
     public int replayLevel = 0;
     public string playerStep;
     public List<string> playerPath = new List<string>() { };
     public List<string> blockPath = new List<string>() { };
     public List<Level> levels = new List<Level>();
+
+    #endregion
+
+    public enum Direction
+    {
+        Defult = 0,
+        Right = 1,
+        Left = 2,
+        Top = 3,
+        Bottom = 4
+    }
 
     public void Start()
     {
@@ -37,107 +50,6 @@ public class Player : MonoBehaviour
             if (this.playerStep.Equals(this.playerPath.Last()))
                 replayMode = false;
         }
-    }
-
-    public void ListLevels()
-    {
-        print("levels saved: " + this.levels.Count);
-        foreach (Level l in this.levels)
-        {
-            print("::level:: " + l.level + " :: blocks :: " + l.blockPath.Count + " :: moves :: " + l.movePath.Count + " :: algo name ::" + l.algoName);
-        }
-    }
-
-    public List<string> getPlayerPathForLevel(int ind)
-    {
-        foreach (Level level in this.levels)
-        {
-            if (level.level == ind)
-            {
-                return level.movePath;
-                break;
-            }
-        }
-
-        return null;
-    }
-
-    public List<Transform> getPlayerBlockPathForLevel(int ind)
-    {
-        foreach (Level level in this.levels)
-        {
-            if (level.level == ind)
-            {
-                return level.blockPath;
-                break;
-            }
-        }
-        return null;
-    }
-
-    public void ListLevels(int ind)
-    {
-        foreach (Level level in this.levels)
-        {
-            if (level.level == ind)
-            {
-                print("List Level " + level.level + "number of blocks " + level.blockPath.Count + "path algoritam " + level.movePath.Count + " alogritam " + level.algoName);
-
-                break;
-            }
-        }
-    }
-
-    public Level GetLevel(int ind)
-    {
-        foreach (Level level in this.levels)
-        {
-            if (level.level == ind)
-            {
-                return level;
-                break;
-            }
-        }
-
-        return null;
-    }
-
-    public void IncreaseLevel()
-    {
-        this.level += 1;
-        UpdateLevelInfo();
-    }
-
-    private bool anyPlayerMoving()
-    {
-        bool result = false;
-
-        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
-
-        for (int i = 0; i < players.Length; i++)
-        {
-            Player player = players[i].GetComponent<Player>();
-
-            if (player.moving) result = true;
-        }
-
-        return result;
-    }
-
-    private List<Transform> getBlackNodes()
-    {
-        List<Transform> result = new List<Transform>();
-
-        GameObject[] nodes = GameObject.FindGameObjectsWithTag("node");
-
-        foreach (GameObject nodeTile in nodes)
-        {
-            Node node = nodeTile.GetComponent<Node>();
-            if (!node.isWalkable() && !node.isStart && !node.isEnd)
-                result.Add(node.transform);
-        }
-
-        return result;
     }
 
     private void RunPlayer()
@@ -253,15 +165,6 @@ public class Player : MonoBehaviour
         return direction;
     }
 
-    public enum Direction
-    {
-        Defult = 0,
-        Right = 1,
-        Left = 2,
-        Top = 3,
-        Bottom = 4
-    }
-
     private void movePlayerToNode(Direction direction, Transform target)
     {
         float speed = 1.5f;
@@ -309,4 +212,104 @@ public class Player : MonoBehaviour
         _textLevelGameObject.GetComponent<Text>().text = "LEVEL " + (this.level - 1) + " COMPLETED";
     }
 
+    public void ListLevels()
+    {
+        print("levels saved: " + this.levels.Count);
+        foreach (Level l in this.levels)
+        {
+            print("::level:: " + l.level + " :: blocks :: " + l.blockPath.Count + " :: moves :: " + l.movePath.Count + " :: algo name ::" + l.algoName);
+        }
+    }
+
+    public List<string> getPlayerPathForLevel(int ind)
+    {
+        foreach (Level level in this.levels)
+        {
+            if (level.level == ind)
+            {
+                return level.movePath;
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Transform> getPlayerBlockPathForLevel(int ind)
+    {
+        foreach (Level level in this.levels)
+        {
+            if (level.level == ind)
+            {
+                return level.blockPath;
+                break;
+            }
+        }
+        return null;
+    }
+
+    public void ListLevels(int ind)
+    {
+        foreach (Level level in this.levels)
+        {
+            if (level.level == ind)
+            {
+                print("List Level " + level.level + "number of blocks " + level.blockPath.Count + "path algoritam " + level.movePath.Count + " alogritam " + level.algoName);
+
+                break;
+            }
+        }
+    }
+
+    public Level GetLevel(int ind)
+    {
+        foreach (Level level in this.levels)
+        {
+            if (level.level == ind)
+            {
+                return level;
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    public void IncreaseLevel()
+    {
+        this.level += 1;
+        UpdateLevelInfo();
+    }
+
+    private bool anyPlayerMoving()
+    {
+        bool result = false;
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            Player player = players[i].GetComponent<Player>();
+
+            if (player.moving) result = true;
+        }
+
+        return result;
+    }
+
+    private List<Transform> getBlackNodes()
+    {
+        List<Transform> result = new List<Transform>();
+
+        GameObject[] nodes = GameObject.FindGameObjectsWithTag("node");
+
+        foreach (GameObject nodeTile in nodes)
+        {
+            Node node = nodeTile.GetComponent<Node>();
+            if (!node.isWalkable() && !node.isStart && !node.isEnd)
+                result.Add(node.transform);
+        }
+
+        return result;
+    }
 }
