@@ -50,39 +50,6 @@ public class ShortestPath : MonoBehaviour
         return result;
     }
 
-    //public List<Transform> findShortestPath(Transform start, Transform end)
-    //{
-    //    nodes = GameObject.FindGameObjectsWithTag("node");
-
-    //    List<Transform> result = new List<Transform>();
-
-    //    //foreach(GameObject nodeGO in nodes)
-    //    //{
-    //    //    Node node = nodeGO.GetComponent<Node>();
-
-    //    //    print("node name: " + node.name + " parent node: " + node.parentNodeName);
-    //    //}
-
-
-    //    Transform node = Search(start, end.name);
-
-
-    //    // While there's still previous node, we will continue.
-    //    while (node != null)
-    //    {
-    //        result.Add(node);
-    //        Node currentNode = node.GetComponent<Node>();
-    //        print("nasao " + currentNode.name);
-    //        print("parent node  " + currentNode.parentNodeName);
-    //        node = Search(start, currentNode.parentNodeName); // currentNode.getParentNode();
-    //        print("parent node 2 " + currentNode.parentNodeName);
-    //    }
-
-    //    // Reverse the list so that it will be from start to end.
-    //    result.Reverse();
-    //    return result;
-    //}
-
     /// <summary>
     /// Dijkstra Algorithm to find the shortest path
     /// </summary>
@@ -150,8 +117,6 @@ public class ShortestPath : MonoBehaviour
 
         return end;
     }
-
-
 
     public Transform BFS_Search(Transform root, string nameToSearchFor)
     {

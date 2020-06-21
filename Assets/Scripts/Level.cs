@@ -11,7 +11,6 @@ public class Level : MonoBehaviour
     public int checkedCount;
     public double timeSpent;
 
-
     public Level(int level, List<Transform> blockPath, List<string> movePath, string algoName, double timeSpent, int checkedCount)
     {
         this.level = level;
