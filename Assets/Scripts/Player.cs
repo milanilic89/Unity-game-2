@@ -8,26 +8,17 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public List<Transform> paths;
-
-    public string currentNode = null;
-    private string nextNode = null;
-
     public string algoName;
-    public List<Level> levels = new List<Level>();
-
     public bool stop = false;
     public int level = 1;
-    public int playerSpeed = 1;
     public bool replayMode = false;
-    public bool moveToStart = false;
     public bool playMode = false;
     public bool moving = false;
     public int replayLevel = 0;
-
     public string playerStep;
-    public List<string> playerPath = new List<string>() { }; 
-    private List<string> blockPath = new List<string>() { }; 
+    public List<string> playerPath = new List<string>() { };
+    public List<string> blockPath = new List<string>() { };
+    public List<Level> levels = new List<Level>();
 
     public void Start()
     {
