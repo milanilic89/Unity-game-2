@@ -121,14 +121,6 @@ public class ShortestPath : MonoBehaviour
             // Get the lowest weight in unexplored.
             Transform current = unexplored[0];
 
-            // Note: This is used for games, as we just want to reduce compuation, better way will be implementing A*
-            /*
-            // If we reach the end node, we will stop.
-            if(current == end)
-            {   
-                return end;
-            }*/
-
             //Remove the node, since we are exploring it now.
             unexplored.Remove(current);
 

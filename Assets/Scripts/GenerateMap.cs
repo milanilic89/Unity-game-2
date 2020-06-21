@@ -47,8 +47,6 @@ public class GenerateMap : MonoBehaviour
     {
         this.generateGrid();
         this.generateNeighbours();
-        //this.generateParents();
-
     }
 
     void Update()
@@ -112,16 +110,6 @@ public class GenerateMap : MonoBehaviour
         if (algo1) enabledAlgorithams += 1;
         if (algo2) enabledAlgorithams += 1;
         if (algo3) enabledAlgorithams += 1;
-
-
-        //for (int i = 1; i <= enabledAlgorithams; i++)
-        //{
-        //    Color randomColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-
-        //    Transform player = Instantiate(playerPrefab, startButton);
-        //    player.name = "player" + i;
-        //    player.GetComponent<Image>().color = i == enabledAlgorithams ? Color.white : randomColor;            
-        //}
 
         if (algo1)
         {
@@ -397,9 +385,7 @@ public class GenerateMap : MonoBehaviour
             player.playerStep = startNode.transform.name;
             //player.level +=1;
             List<Transform> transformPath = player.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform);
-
-            //double timeSpentRoundedOn5 = System.Math.Round(player.GetComponent<ShortestPath>().timeSpent, 5);
-            
+        
             double timeSpentRoundedOn5 = player.GetComponent<ShortestPath>().timeSpent;
 
             int checkedNodes = player.GetComponent<ShortestPath>().checkedNodesCount;

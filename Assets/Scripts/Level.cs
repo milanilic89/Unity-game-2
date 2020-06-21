@@ -6,7 +6,6 @@ public class Level : MonoBehaviour
 {
     public int level;
     public List<Transform> blockPath;
-    //public List<Transform> movePath;
     public List<string> movePath;
     public string algoName;
     public int checkedCount;

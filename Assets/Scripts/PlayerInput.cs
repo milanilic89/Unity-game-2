@@ -36,10 +36,9 @@ public class PlayerInput : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //SetDefaultNodes();
+
     }
 
 
@@ -187,12 +186,7 @@ public class PlayerInput : MonoBehaviour
 
             if (startRunner != null)
                 startRunner.GetComponent<Button>().onClick.Invoke();
-
-            // run game
-            //btnFindPath();
         }
-
-
     }
 
     public void SetDefaultNodes()
