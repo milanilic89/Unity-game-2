@@ -256,7 +256,7 @@ public class GenerateMap : MonoBehaviour
             alogNameText.GetComponent<Text>().text = "Algorithm name: " + _level.algoName;                 
 
             alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
-            alogNameText.GetComponent<Text>().text = "Checked: " + _level.checkedCount;
+            alogNameText.GetComponent<Text>().text = "Checked fields: " + _level.checkedCount;
 
             alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
             alogNameText.GetComponent<Text>().text = "Time spent: " + _level.timeSpent;
