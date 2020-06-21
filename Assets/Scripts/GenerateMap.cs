@@ -158,11 +158,6 @@ public class GenerateMap : MonoBehaviour
     /// </summary>
     private void PlayNextLevel()
     {
-        //GameObject dataScreen = GameObject.Find("ViewScreenData");
-
-        //print("hide data screen:" + dataScreen != null);
-        //dataScreen.GetComponent<Image>().enabled = false;
-
         updateBlackNodes();
 
         //if (this.gameLevel == 2)
@@ -185,7 +180,7 @@ public class GenerateMap : MonoBehaviour
     {
         GameObject[] nodes = GameObject.FindGameObjectsWithTag("node");
 
-        if (this.currentBlockNodes.Count > 0 && this.blockNodes.Count !=0)
+        if (this.currentBlockNodes.Count > 0 && this.blockNodes.Count != 0)
         {
 
             foreach (GameObject gamenode in nodes)
@@ -238,8 +233,15 @@ public class GenerateMap : MonoBehaviour
         Transform newButtonLevel = Instantiate(dataScreenPrefab, dataScreenRoot.transform);
         newButtonLevel.name = "GameLevel" + level;
         newButtonLevel.GetComponent<Button>().GetComponentInChildren<Text>().text = "Level " + level;
+        newButtonLevel.transform.tag = "buttonLevel";
+
+        GameObject.Find(newButtonLevel.name).SetActive(false);
+
+        //newButtonLevel.GetComponent<Image>().enabled = false;
+        //newButtonLevel.GetComponent<Text>().enabled = false;
 
         newButtonLevel.GetComponent<Button>().onClick.AddListener(delegate { showLevelDataScreen(level); });
+
 
     }
 
@@ -489,8 +491,29 @@ public class GenerateMap : MonoBehaviour
         return result;
     }
 
+    GameObject FindInActiveObjectByName(string name)
+    {
+        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
+        for (int i = 0; i < objs.Length; i++)
+        {
+            if (objs[i].hideFlags == HideFlags.None)
+            {
+                if (objs[i].name == name)
+                {
+                    return objs[i].gameObject;
+                }
+            }
+        }
+        return null;
+    }
+
     public void GameOver()
     {
+        GameObject[] levelsInfo = GameObject.FindGameObjectsWithTag("buttonLevel");
+
+        for (int i = 2; i < this.gameLevel-1; i++)
+            FindInActiveObjectByName("GameLevel"+i).SetActive(true);
+
         GameObject levelText = GameObject.Find("TextLevel");
 
         if (levelText != null)

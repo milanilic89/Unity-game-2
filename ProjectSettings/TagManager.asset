@@ -15,6 +15,7 @@ TagManager:
   - player2
   - player3
   - level
+  - buttonLevel
   layers:
   - Default
   - TransparentFX
