@@ -113,7 +113,7 @@ public class GenerateMap : MonoBehaviour
             Transform player = Instantiate(playerPrefab, startButton);
             player.name = "player" + 1;
             player.GetComponent<Image>().color = Color.white;
-            player.GetComponent<Player>().algoName = "Dijkstra's algorithm";
+            player.GetComponent<Player>().algoName = "Dijkstra";
         }
 
         if (algo2)
@@ -123,7 +123,7 @@ public class GenerateMap : MonoBehaviour
             Transform player = Instantiate(playerPrefab, startButton);
             player.name = "player" + 2;
             player.GetComponent<Image>().color = randomColor;
-            player.GetComponent<Player>().algoName = "BFS traversal";
+            player.GetComponent<Player>().algoName = "BFS";
         }
 
         if (algo3)
@@ -133,7 +133,7 @@ public class GenerateMap : MonoBehaviour
             Transform player = Instantiate(playerPrefab, startButton);
             player.name = "player" + 3;
             player.GetComponent<Image>().color = randomColor;
-            player.GetComponent<Player>().algoName = "DFS traversal";
+            player.GetComponent<Player>().algoName = "DFS";
         }
 
     }
@@ -351,7 +351,7 @@ public class GenerateMap : MonoBehaviour
 
             player.playerStep = startNode.transform.name;
 
-            List<Transform> transformPath = player.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform);
+            List<Transform> transformPath = player.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform, player.algoName);
         
             double timeSpentRoundedOn5 = player.GetComponent<ShortestPath>().timeSpent;
 
@@ -387,7 +387,7 @@ public class GenerateMap : MonoBehaviour
         GameObject startNode = GameObject.Find("node (" + this.Xstart + "," + this.Ystart + ")");
         GameObject endNode = GameObject.Find("node (" + this.Xend + "," + this.Yend + ")");
 
-        List<Transform> paths = finder.findShortestPath(startNode.transform, endNode.transform);
+        List<Transform> paths = finder.findShortestPath(startNode.transform, endNode.transform, "Dijkstra");
 
         if (paths.Count <= 1)
         {
@@ -569,7 +569,7 @@ public class GenerateMap : MonoBehaviour
             nextPlayer.playMode = true;
             nextPlayer.playerStep = startNode.transform.name;
             nextPlayer.level = 1;
-            List<Transform> transformPath = nextPlayer.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform);
+            List<Transform> transformPath = nextPlayer.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform, nextPlayer.algoName);
             List<string> path = new List<string>();
 
             foreach (Transform node in transformPath)

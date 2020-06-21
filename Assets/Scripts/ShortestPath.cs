@@ -18,7 +18,7 @@ public class ShortestPath : MonoBehaviour
     /// <param name="start">The start point</param>
     /// <param name="end">The end point</param>
     /// <returns>A List of transform for the shortest path</returns>
-    public List<Transform> findShortestPath(Transform start, Transform end)
+    public List<Transform> findShortestPath(Transform start, Transform end, string algorithmName)
     {
         this.checkedNodesCount = 0;
 
@@ -28,17 +28,29 @@ public class ShortestPath : MonoBehaviour
 
         List<Transform> result = new List<Transform>();
 
-        Transform node = BFS_Search(start, end.name);
+        Transform node = null;
 
-        node = DijkstrasAlgo(start, end);
+        if (algorithmName.Equals("BFS"))
+            node = BFS_Search(start, end.name);
 
+        if (algorithmName.Equals("Dijkstra"))
+            node = DijkstrasAlgo(start, end);
 
+        if (algorithmName.Equals("DFS"))
+            node = DijkstrasAlgo(start, end);
+
+        int i = 0;
         while (node != null)
         {
+            i++;
             result.Add(node);
             Node currentNode = node.GetComponent<Node>();
             node = currentNode.getParentNode();
+            //if (node == start) break;
+            if (i == 2000) break;
         }
+
+        //print(result.Count);
 
         // Reverse the list so that it will be from start to end.
         result.Reverse();
@@ -47,7 +59,15 @@ public class ShortestPath : MonoBehaviour
 
         this.timeSpent = endTime;
 
+        print(result);
+
         return result;
+    }
+
+    private void print(List<Transform> result)
+    {
+        foreach (Transform t in result)
+            print(t.name);
     }
 
     /// <summary>
@@ -120,8 +140,6 @@ public class ShortestPath : MonoBehaviour
 
     public Transform BFS_Search(Transform root, string nameToSearchFor)
     {
-        print("BFS search");
-
         Queue<Transform> Q = new Queue<Transform>();
         HashSet<Transform> S = new HashSet<Transform>();
         Q.Enqueue(root);
@@ -134,15 +152,15 @@ public class ShortestPath : MonoBehaviour
                 return e;
             foreach (Transform neighbour in e.GetComponent<Node>().getNeighbourNode())
             {
-                if (!S.Contains(neighbour))
+                if (!S.Contains(neighbour) && neighbour.GetComponent<Node>().isWalkable() && root != neighbour)
                 {
                     Q.Enqueue(neighbour);
+                    neighbour.GetComponent<Node>().setParentNode(e);
                     S.Add(neighbour);
                 }
             }
         }
 
-        print("BFS search count:" + S.Count);
 
         return null;
     }
