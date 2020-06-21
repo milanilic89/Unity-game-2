@@ -37,20 +37,20 @@ public class ShortestPath : MonoBehaviour
             node = DijkstrasAlgo(start, end);
 
         if (algorithmName.Equals("DFS"))
-            node = DijkstrasAlgo(start, end);
+        {
+            //Debug.Log("DFS has a bug");
+            //List<Transform> path = FindPath_DFS_Algo(start, end);            
+            //this.timeSpent = (Time.realtimeSinceStartup - startTime);
+            //return path;
+            node = BFS_Search(start, end.name);
+        }
 
-        int i = 0;
         while (node != null)
         {
-            i++;
             result.Add(node);
             Node currentNode = node.GetComponent<Node>();
             node = currentNode.getParentNode();
-            //if (node == start) break;
-            if (i == 2000) break;
         }
-
-        //print(result.Count);
 
         // Reverse the list so that it will be from start to end.
         result.Reverse();
@@ -59,7 +59,7 @@ public class ShortestPath : MonoBehaviour
 
         this.timeSpent = endTime;
 
-        print(result);
+        //print(result);
 
         return result;
     }
@@ -138,12 +138,20 @@ public class ShortestPath : MonoBehaviour
         return end;
     }
 
+    /// <summary>
+    /// Breadth-first search algorithm to find the shortest path
+    /// </summary>
+    /// <param name="root">The start point</param>
+    /// <param name="nameToSearchFor">The end point</param>
+    /// <returns>The end node</returns>
     public Transform BFS_Search(Transform root, string nameToSearchFor)
     {
         Queue<Transform> Q = new Queue<Transform>();
         HashSet<Transform> S = new HashSet<Transform>();
         Q.Enqueue(root);
         S.Add(root);
+
+        this.checkedNodesCount += 1;
 
         while (Q.Count > 0)
         {
@@ -152,6 +160,7 @@ public class ShortestPath : MonoBehaviour
                 return e;
             foreach (Transform neighbour in e.GetComponent<Node>().getNeighbourNode())
             {
+                this.checkedNodesCount += 1;
                 if (!S.Contains(neighbour) && neighbour.GetComponent<Node>().isWalkable() && root != neighbour)
                 {
                     Q.Enqueue(neighbour);
@@ -161,45 +170,15 @@ public class ShortestPath : MonoBehaviour
             }
         }
 
-
         return null;
     }
 
     /// <summary>
-    /// Breadth-first search BFS traversal Algorithm to find the shortest path
+    /// Depth-first search algorithm to find the shortest path
     /// </summary>
     /// <param name="start">The start point</param>
-    /// <param name="end">The end point</param>
+    /// <param name="target">The end point</param>
     /// <returns>The end node</returns>
-    public List<Transform> BFS_traversalAlgo(Transform start, Transform end)
-    {
-        Queue<Transform> q = new Queue<Transform>();
-        q.Enqueue(start);
-
-        while (q.Count > 0)
-        {
-            start = q.Dequeue();
-
-            foreach (Transform child in start.GetComponent<Node>().getNeighbourNode())
-                if (child != null)
-                    q.Enqueue(child);
-        }
-
-        return q.ToList<Transform>();
-    }
-
-    /// <summary>
-    /// DFS traversal Algorithm to find the shortest path
-    /// </summary>
-    /// <param name="start">The start point</param>
-    /// <param name="end">The end point</param>
-    /// <returns>The end node</returns>
-    private Transform DFS_traversalAlgo(Transform start, Transform end)
-    {
-        return null;
-    }
-
-    //DFS find path
     public List<Transform> FindPath_DFS_Algo(Transform start, Transform target)
     {
         List<Transform> path = new List<Transform>();
@@ -208,16 +187,21 @@ public class ShortestPath : MonoBehaviour
 
         if (target == start)
         {
+            this.checkedNodesCount += 1;
             return path;
         }
 
         foreach (Transform tn in start.GetComponent<Node>().getNeighbourNode())
         {
-            List<Transform> childPath = FindPath_DFS_Algo(tn, target);
-            if (childPath != null)
+            this.checkedNodesCount += 1;
+            if (tn.GetComponent<Node>().isWalkable())
             {
-                path.AddRange(childPath);
-                return path;
+                List<Transform> childPath = FindPath_DFS_Algo(tn, target);
+                if (childPath != null)
+                {
+                    path.AddRange(childPath);
+                    return path;
+                }
             }
         }
 
