@@ -13,10 +13,8 @@ public class Player : MonoBehaviour
     public string currentNode = null;
     private string nextNode = null;
 
-    public bool autorun = false;
-
-    public Text levelText;
-    public Text levelCompletedText;
+    public string algoName;
+    public List<Level> levels = new List<Level>();
 
     public bool stop = false;
     public int level = 1;
@@ -25,26 +23,29 @@ public class Player : MonoBehaviour
     public bool moveToStart = false;
     public bool playMode = false;
     public bool moving = false;
-
-    public string algoName;
-    public List<Level> levels = new List<Level>();
-
-    public InputField levelField;
+    public int replayLevel = 0;
 
     public string playerStep;
-
     public List<string> playerPath = new List<string>() { }; 
     private List<string> blockPath = new List<string>() { }; 
 
-    public int replayLevel = 0;
-
-    public void startMove()
-    {
-        this.currentNode = "start";
-    }
-
     public void Start()
     {
+    }
+
+    public void Update()
+    {
+        if (this.playMode)
+        {
+            RunPlayer();
+        }
+        if (this.replayMode)
+        {
+            TriggerReplay(this.replayLevel, this.playerPath);
+
+            if (this.playerStep.Equals(this.playerPath.Last()))
+                replayMode = false;
+        }
     }
 
     public void ListLevels()
@@ -148,21 +149,6 @@ public class Player : MonoBehaviour
         return result;
     }
 
-    public void Update()
-    {
-        if (this.playMode)
-        {
-            RunPlayer();
-        }
-        if (this.replayMode)
-        {
-            TriggerReplay(this.replayLevel, this.playerPath);
-
-            if (this.playerStep.Equals(this.playerPath.Last()))
-                replayMode = false;
-        }
-    }
-
     private void RunPlayer()
     {
         this.RunPath();
@@ -192,36 +178,6 @@ public class Player : MonoBehaviour
             GameObject.Find(node).GetComponent<Image>().color = Color.red;
     }
 
-    private void transformToStart()
-    {
-        GameObject start = GameObject.FindGameObjectsWithTag("start").FirstOrDefault();
-
-        if (start == null)
-            start = GameObject.Find("node (1,4)");
-
-        if (this.transform.position.x < start.transform.position.x)
-        {
-            float x_diff = start.transform.position.x - this.transform.position.x;
-            this.transform.Translate(x_diff, 0, 0, Space.World);
-        }
-        else
-        {
-            float x_diff = this.transform.position.x - start.transform.position.x;
-            this.transform.Translate(-x_diff, 0, 0, Space.World);
-        }
-
-        if (this.transform.position.y < start.transform.position.y)
-        {
-            float y_diff = start.transform.position.y - this.transform.position.y;
-            this.transform.Translate(0, y_diff, 0, Space.World);
-        }
-        else
-        {
-            float y_diff = this.transform.position.y - start.transform.position.y;
-            this.transform.Translate(0, -y_diff, 0, Space.World);
-        }
-    }
-
     public void TriggerReplay(int level, List<string> _path)
     {
         for (int i = 0; i < _path.Count - 1; i++)
@@ -242,111 +198,6 @@ public class Player : MonoBehaviour
                 MovePlayerVisual(this.playerStep, _path[i + 1]);
             }
         }
-    }
-
-    private void movePlayer(Transform path)
-    {
-        if (this.nextNode != path.name) return;
-
-        if (this.currentNode == this.nextNode) return;
-
-        float speed = 0.5f;
-
-        int diff_x = (int)System.Math.Abs((path.position.x - this.transform.position.x));
-        int diff_y = (int)System.Math.Abs((path.position.y - this.transform.position.y));
-
-        if (diff_x == 0 && diff_y == 0)
-        {
-        }
-
-        if (this.transform.position.x < path.position.x && diff_x >= 0)
-        {
-            int diff = (int)(path.position.x - this.transform.position.x);
-
-            for (int i = 0; i <= diff; i++)
-                this.transform.Translate(speed, 0, 0, Space.World);
-
-            if (this.transform.position.x >= path.position.x)
-            {
-                this.currentNode = this.nextNode;
-                this.nextNode = getNextElement(path);
-            }
-        }
-
-        if (this.transform.position.y < path.position.y && diff_y > 0)
-        {
-            int diff = (int)(path.position.y - this.transform.position.y);
-            for (int i = 0; i <= diff; i++)
-                this.transform.Translate(0, speed, 0, Space.World);
-
-            if (this.transform.position.y >= path.position.y)
-            {
-                this.currentNode = this.nextNode;
-                this.nextNode = getNextElement(path);
-            }
-
-        }
-
-        if (this.transform.position.x > path.position.x && diff_x > 0)
-        {
-            int diff = (int)(this.transform.position.x - path.position.x);
-            for (int i = 0; i <= diff; i++)
-                this.transform.Translate(-speed, 0, 0, Space.World);
-
-            if (this.transform.position.x <= path.position.x)
-            {
-                this.currentNode = this.nextNode;
-                this.nextNode = getNextElement(path);
-            }
-        }
-
-        if (this.transform.position.y > path.position.y && diff_y >= 0)
-        {
-            int diff = (int)(this.transform.position.y - this.transform.position.y);
-            for (int i = 0; i <= diff; i++)
-                this.transform.Translate(0, -speed, 0, Space.World);
-
-            if (this.transform.position.y <= path.position.y)
-            {
-                this.currentNode = this.nextNode;
-                this.nextNode = getNextElement(path);
-            }
-        }
-    }
-
-    string getNextElement(Transform element)
-    {
-        string result = null;
-
-        if (paths.Contains(element))
-        {
-            if (paths.IndexOf(element) + 1 < paths.Count)
-                result = paths.ElementAt(paths.IndexOf(element) + 1).name;
-        }
-
-        return result;
-    }
-
-    public void reset()
-    {
-        this.currentNode = null;
-        this.nextNode = null;
-    }
-
-    public void GameOver()
-    {
-        GameObject levelText = GameObject.Find("TextLevel");
-
-        if (levelText != null)
-        {
-            levelText.GetComponent<Text>().text = "GAME OVER";
-            levelText.GetComponent<Text>().color = Color.red;
-        }
-    }
-
-    private void MovePlayerToStart()
-    {
-        this.moveToStart = true;
     }
 
     private void SetBlocksForreplay(List<string> blockPath)
