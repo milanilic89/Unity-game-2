@@ -437,7 +437,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2066052631}
+      - m_Target: {fileID: 2066052628}
         m_MethodName: btnRestart
         m_Mode: 1
         m_Arguments:
@@ -720,7 +720,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2066052631}
+      - m_Target: {fileID: 2066052628}
         m_MethodName: LoadPlayScene
         m_Mode: 1
         m_Arguments:
@@ -863,7 +863,6 @@ GameObject:
   m_Component:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
-  - component: {fileID: 519420029}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -871,18 +870,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &519420029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 667edaf039210924a8a89427e7283efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1201,7 +1188,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2066052631}
+      - m_Target: {fileID: 2066052628}
         m_MethodName: applicationExit
         m_Mode: 1
         m_Arguments:
@@ -2062,6 +2049,31 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7269208612322442377}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2066052628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2066052627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b53da63122166114f884a805fe440ad7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 0}
+  blockPath: []
+  x_start: {fileID: 0}
+  y_start: {fileID: 0}
+  x_end: {fileID: 0}
+  y_end: {fileID: 0}
+  levelText: {fileID: 0}
+  levelCompletedText: {fileID: 0}
+  map_size: {fileID: 0}
+  InputFieldLevel: {fileID: 0}
+  startBtn: {fileID: 0}
+  endBtn: {fileID: 0}
+  ReplayMode: 0
 --- !u!114 &2066052629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2069,7 +2081,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066052627}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b6f2182a9bde8444af14ff3ed73e6b6, type: 3}
   m_Name: 
@@ -2094,44 +2106,6 @@ MonoBehaviour:
   playerStep: node (1,4)
   playerPath: []
   replayLevel: 0
---- !u!114 &2066052631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066052627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b53da63122166114f884a805fe440ad7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 5844711993277076578, guid: 30624357b47fe834591f806787522568,
-    type: 3}
-  blockPath: []
-  x_start: {fileID: 0}
-  y_start: {fileID: 0}
-  x_end: {fileID: 0}
-  y_end: {fileID: 0}
-  levelText: {fileID: 0}
-  levelCompletedText: {fileID: 1286131}
-  map_size: {fileID: 0}
-  InputFieldLevel: {fileID: 0}
-  startBtn: {fileID: 0}
-  endBtn: {fileID: 0}
-  ReplayMode: 0
---- !u!114 &2066052632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2066052627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe90e0937e3c67d4386b7c7a7c38ea06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7269208612322442377
 PrefabInstance:
   m_ObjectHideFlags: 0

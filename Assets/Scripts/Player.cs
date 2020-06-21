@@ -26,31 +26,17 @@ public class Player : MonoBehaviour
     public bool playMode = false;
     public bool moving = false;
 
-    public Transform startNode = null;
-    public Transform endNode = null;
-
     public string algoName;
-
     public List<Level> levels = new List<Level>();
 
     public InputField levelField;
 
-    public string playerStep = "node (1,4)";
+    public string playerStep;
 
-    public List<string> playerPath = new List<string>() { }; // { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)", };
-    private List<string> blockPath = new List<string>() { }; // { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)", };
+    public List<string> playerPath = new List<string>() { }; 
+    private List<string> blockPath = new List<string>() { }; 
 
     public int replayLevel = 0;
-
-    public void SavePlayer()
-    {
-        //SaveSystem.SavePlayer(this);
-    }
-
-    public void LoadPlayer()
-    {
-        SetReplay();
-    }
 
     public void startMove()
     {
@@ -96,7 +82,6 @@ public class Player : MonoBehaviour
         }
         return null;
     }
-
 
     public void ListLevels(int ind)
     {
@@ -161,17 +146,6 @@ public class Player : MonoBehaviour
         }
 
         return result;
-    }
-
-    private void UpdateLevelInfo()
-    {
-        GameObject _textLevelGameObject = GameObject.Find("TextLevel");
-
-        _textLevelGameObject.GetComponent<Text>().text = "Level " + this.level;
-
-        _textLevelGameObject = GameObject.Find("game_info");
-
-        _textLevelGameObject.GetComponent<Text>().text = "LEVEL " + (this.level - 1) + " COMPLETED";
     }
 
     public void Update()
@@ -246,83 +220,6 @@ public class Player : MonoBehaviour
             float y_diff = this.transform.position.y - start.transform.position.y;
             this.transform.Translate(0, -y_diff, 0, Space.World);
         }
-    }
-
-    public void Move()
-    {
-        if (paths.Count == 0) return;
-        if (paths.Last() == this.transform) return;
-
-        if (paths.Count == 1)
-        {
-            this.GameOver();
-            return;
-        }
-
-        if (this.currentNode == null)
-        {
-            this.currentNode = paths.First().name;
-            this.nextNode = paths.ElementAt(1).name;
-        }
-
-        foreach (Transform path in paths)
-        {
-            movePlayer(path);
-        }
-
-        if (this.currentNode == paths.Last().name)
-        {
-            print("move2");
-
-            this.currentNode = "start";
-            this.currentNode = "completed";
-
-            if (this.levelCompletedText == null)
-            {
-                GameObject _textLevelGameObject = GameObject.Find("TextLevel");
-
-                this.levelText = _textLevelGameObject.GetComponent<Text>();
-
-                _textLevelGameObject = GameObject.Find("game_info");
-
-                this.levelCompletedText = _textLevelGameObject.GetComponent<Text>();
-          }
-
-            if (this.levelCompletedText != null)
-            {
-                this.levelCompletedText.text = "LEVEL " + this.level + " COMPLETED"; //this.levelText.text + " COMPLETED";
-
-                PlayerInput input = this.GetComponent<PlayerInput>();
-
-                if (input != null && !this.replayMode)
-                {
-                    print("New block" + this.replayMode);
-                    input.btnBlockPath();
-                }
-
-                // replay level completed
-                if (replayMode)
-                {
-                    replayMode = false;
-                    return;
-                }
-            }
-
-            // if autorun is enabled
-            if (this.autorun)
-            {
-                PlayerInput input = this.GetComponent<PlayerInput>();
-                if (input != null)
-                {
-                    if (!this.replayMode)
-                        input.PlayNextLevel();
-
-                    if (this.levelText != null && !this.replayMode)
-                        this.levelText.text = "Level " + this.level;
-                }
-            }
-        }
-
     }
 
     public void TriggerReplay(int level, List<string> _path)
@@ -447,64 +344,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void replay()
-    {
-        this.replayMode = true;
-        this.reset();
-        this.Move();
-    }
-
-    // set Replay mode On/Off
-    public void SetReplay()
-    {   
-        this.replayMode = true;
-        this.autorun = false;
-
-        if (this.levelField != null)
-            this.replayLevel = int.Parse(this.levelField.text);
-
-        if (this.replayLevel > this.levels.Count || this.replayLevel < 1)
-        {
-            this.replayMode = false;
-            return;
-        }
-
-        MovePlayerToStart();
-
-        this.playerPath.Clear();
-        this.blockPath.Clear();
-
-        if (this.levels.Count > 0)
-        {
-            foreach (Level _level in this.levels)
-            {
-                if (_level.level == this.replayLevel)
-                {
-                    foreach (Transform node in _level.blockPath)
-                        this.blockPath.Add(node.name);
-
-                    break;
-                }
-            }
-
-            print("dodato covorva " + this.playerPath.Count);
-            print("player step:" + this.playerStep);
-            this.playerStep = this.playerPath.First();
-            foreach (string s in this.playerPath)
-            {
-                print("dodato covorva " + s);
-            }
-
-            SetBlocksForreplay(this.blockPath);
-
-        }
-        else
-        {
-            Debug.Log("Error: choose existing level.");
-        }
-
-    }
-
     private void MovePlayerToStart()
     {
         this.moveToStart = true;
@@ -616,4 +455,16 @@ public class Player : MonoBehaviour
             this.playerStep = target.name;
         }
     }
+
+    private void UpdateLevelInfo()
+    {
+        GameObject _textLevelGameObject = GameObject.Find("TextLevel");
+
+        _textLevelGameObject.GetComponent<Text>().text = "Level " + this.level;
+
+        _textLevelGameObject = GameObject.Find("game_info");
+
+        _textLevelGameObject.GetComponent<Text>().text = "LEVEL " + (this.level - 1) + " COMPLETED";
+    }
+
 }

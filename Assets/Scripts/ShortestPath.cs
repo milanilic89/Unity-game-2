@@ -28,7 +28,10 @@ public class ShortestPath : MonoBehaviour
 
         List<Transform> result = new List<Transform>();
 
-        Transform node = DijkstrasAlgo(start, end);
+        Transform node = BFS_Search(start, end.name);
+
+        node = DijkstrasAlgo(start, end);
+
 
         while (node != null)
         {
@@ -126,8 +129,6 @@ public class ShortestPath : MonoBehaviour
                 this.checkedNodesCount += 1;
                 Node node = neighNode.GetComponent<Node>();
 
-                this.checkedNodesCount += 1;
-
                 // We want to avoid those that had been explored and is not walkable.
                 if (unexplored.Contains(neighNode) && node.isWalkable())
                 {
@@ -152,8 +153,10 @@ public class ShortestPath : MonoBehaviour
 
 
 
-    public Transform Search(Transform root, string nameToSearchFor)
-    {        
+    public Transform BFS_Search(Transform root, string nameToSearchFor)
+    {
+        print("BFS search");
+
         Queue<Transform> Q = new Queue<Transform>();
         HashSet<Transform> S = new HashSet<Transform>();
         Q.Enqueue(root);
@@ -164,16 +167,18 @@ public class ShortestPath : MonoBehaviour
             Transform e = Q.Dequeue();
             if (e.GetComponent<Node>().name == nameToSearchFor)
                 return e;
-            foreach (Transform friend in e.GetComponent<Node>().getNeighbourNode())
+            foreach (Transform neighbour in e.GetComponent<Node>().getNeighbourNode())
             {
-                print("prolazi");
-                if (!S.Contains(friend))
+                if (!S.Contains(neighbour))
                 {
-                    Q.Enqueue(friend);
-                    S.Add(friend);
+                    Q.Enqueue(neighbour);
+                    S.Add(neighbour);
                 }
             }
         }
+
+        print("BFS search count:" + S.Count);
+
         return null;
     }
 
