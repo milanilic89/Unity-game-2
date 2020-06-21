@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -38,7 +37,6 @@ public class GenerateMap : MonoBehaviour
     public Transform dataScreenPrefab;
     public Transform dataScreenTextPrefab;
     public Transform dataScreenReplayPrefab;
-
 
     #endregion
 
@@ -94,7 +92,6 @@ public class GenerateMap : MonoBehaviour
 
         GameObject canvas = GameObject.Find("RunCanvas");
 
-
         startButton = Instantiate(startPrefab, canvas.transform);
         startButton.name = "startRunner";
         startButton.GetComponent<Button>().onClick.AddListener(delegate { addNextRunner(); });
@@ -148,18 +145,12 @@ public class GenerateMap : MonoBehaviour
     {
         updateBlackNodes();
 
-        //if (this.gameLevel == 2)
-        //    CreateDataScreen();
-
-        // if all players are in next level
         if (allPlayersTheSameLevel())
         {
-            // or game over
             addNewBlockNode();
 
             CreateDataScreen();
 
-            // play new level - visual
             playNewLevel();
         }
     }
@@ -170,7 +161,6 @@ public class GenerateMap : MonoBehaviour
 
         if (this.currentBlockNodes.Count > 0 && this.blockNodes.Count != 0)
         {
-
             foreach (GameObject gamenode in nodes)
             {
                 gamenode.GetComponent<Image>().color = Color.white;
@@ -198,7 +188,7 @@ public class GenerateMap : MonoBehaviour
     }
 
     /// <summary>
-    /// TODO: when game is over - set player
+    /// 
     /// </summary>
     private void StopAllPlayers()
     {
@@ -225,12 +215,7 @@ public class GenerateMap : MonoBehaviour
 
         GameObject.Find(newButtonLevel.name).SetActive(false);
 
-        //newButtonLevel.GetComponent<Image>().enabled = false;
-        //newButtonLevel.GetComponent<Text>().enabled = false;
-
         newButtonLevel.GetComponent<Button>().onClick.AddListener(delegate { showLevelDataScreen(level); });
-
-
     }
 
     private void showLevelDataScreen(int level)
@@ -286,17 +271,13 @@ public class GenerateMap : MonoBehaviour
         replayLevelButton.GetComponent<Button>().onClick.AddListener(delegate { replayLevel(level); });
 
         replayLevelButton.GetComponent<Button>().GetComponentInChildren<Text>().text = "Replay Level " + level;
-
     }
 
     private void replayLevel(int level)
     {
-        //print("replaying level " + level);
-
         GameObject[] players = GameObject.FindGameObjectsWithTag("player");
 
         GameObject startNode = GameObject.Find("node (" + this.Xstart + "," + this.Ystart + ")");
-        //        GameObject endNode = GameObject.Find("node (" + this.Xend + "," + this.Yend + ")");
 
         for (int i = 0; i < players.Length; i++)
         {
@@ -314,7 +295,6 @@ public class GenerateMap : MonoBehaviour
 
             SetNewBlackNodes(_player.getPlayerBlockPathForLevel(level));
         }
-
     }
 
     private void SetNewBlackNodes(List<Transform> newBlackNodes)
@@ -330,7 +310,6 @@ public class GenerateMap : MonoBehaviour
         {
             t.GetComponent<Image>().color = Color.black;
         }
-
     }
 
     private void addNewBlockNode()
@@ -359,7 +338,6 @@ public class GenerateMap : MonoBehaviour
 
     private void playNewLevel()
     {
-        // move to start, set all moving, set paths, set playing step
         GameObject[] players = GameObject.FindGameObjectsWithTag("player");
 
         GameObject startNode = GameObject.Find("node (" + this.Xstart + "," + this.Ystart + ")");
@@ -372,7 +350,7 @@ public class GenerateMap : MonoBehaviour
             players[i].transform.position = startNode.transform.position;
 
             player.playerStep = startNode.transform.name;
-            //player.level +=1;
+
             List<Transform> transformPath = player.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform);
         
             double timeSpentRoundedOn5 = player.GetComponent<ShortestPath>().timeSpent;
@@ -567,8 +545,6 @@ public class GenerateMap : MonoBehaviour
     /// </summary>
     private void addNextRunner()
     {
-        //print("Next runner added");
-
         GameObject[] players = GameObject.FindGameObjectsWithTag("player");
 
         Player nextPlayer = null;
@@ -751,9 +727,6 @@ public class GenerateMap : MonoBehaviour
     /// </summary>
     public void resizeMap()
     {
-        //this.row = 10;
-        //this.column = 10;
-
         GameObject inputRow = GameObject.Find("InputRow");
         GameObject inputColumn = GameObject.Find("InputColumn");
 
