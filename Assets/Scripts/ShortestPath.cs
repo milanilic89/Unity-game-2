@@ -28,13 +28,8 @@ public class ShortestPath : MonoBehaviour
 
         List<Transform> result = new List<Transform>();
 
-        // algoritam  
         Transform node = DijkstrasAlgo(start, end);
 
-        //Transform node = Search(start, end);
-
-
-        // While there's still previous node, we will continue.
         while (node != null)
         {
             result.Add(node);
@@ -158,9 +153,7 @@ public class ShortestPath : MonoBehaviour
 
 
     public Transform Search(Transform root, string nameToSearchFor)
-    {
-        //string nameToSearchFor = nameToSearchForT.GetComponent<Node>().name;
-
+    {        
         Queue<Transform> Q = new Queue<Transform>();
         HashSet<Transform> S = new HashSet<Transform>();
         Q.Enqueue(root);

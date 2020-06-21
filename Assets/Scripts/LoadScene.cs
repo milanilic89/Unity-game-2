@@ -9,24 +9,14 @@ public class LoadScene : MonoBehaviour
 
     void Start()
     {
-        print("first lunch");
         if (this.FirstLaunch == 0)
         {
-            print("run lanch");
-
             this.FirstLaunch = 1;
 
             //First launch
             PlayerPrefs.SetInt("FirstLaunch", 1);
             SceneManager.LoadScene("RunAndPlay", LoadSceneMode.Additive);
             SceneManager.LoadScene("GameSettings", LoadSceneMode.Additive);
-
-        }
-        else
-        {
-            //Load scene_02 if its not the first launch
-            //SceneManager.LoadScene("RunAndPlay");
-            print("already loaded");
         }
     }
 

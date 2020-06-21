@@ -8,9 +8,6 @@ public class LoadLevels : MonoBehaviour
     void Start()
     {
 
-        //for (int i = 0; i < 15; i++)
-        //    LoadLevel();
-
     }
 
     // Update is called once per frame
@@ -18,10 +15,4 @@ public class LoadLevels : MonoBehaviour
     {
 
     }
-
-    //public void LoadLevel()
-    //{
-    //    Transform newButtonLevel = Instantiate(buttonLevelPrefab, this.transform);
-    //}
-
 }

@@ -339,15 +339,12 @@ public class GenerateMap : MonoBehaviour
 
         if (_node == null)
         {
-            print("Game is over 1");
-            //this.player.stop = true;
             GameOver();
             return;
         }
 
         if (CheckRouteForBlockNode(_node, this.blockNodes))
         {
-            // route exists, add black node
             _node.setWalkable(false);
             this.blockNodes.Add(_node.transform);
         }
@@ -355,17 +352,9 @@ public class GenerateMap : MonoBehaviour
         {
             if (!AddAnyPossibleBlock(this.blockNodes))
             {
-                // TODO GAME OVER
-                //this.player.stop = true;
-                //this.player.GameOver();
                 GameOver();
             }
         }
-
-        // TODO
-        //if (this.player != null)
-        //    this.player.IncreaseLevel();
-
     }
 
     private void playNewLevel()
@@ -613,16 +602,6 @@ public class GenerateMap : MonoBehaviour
             nextPlayer.playerPath = path;
             nextPlayer.moving = true;
         }
-
-        //int movingCount = 0;
-        //foreach (GameObject player in players)
-        //{
-        //    if (player.GetComponent<Player>().moving)
-        //        movingCount++;
-        //}
-
-        //if (this.enabledAlgorithams == movingCount)
-        //    CreateDataScreen();
     }
 
     /// <summary>
@@ -647,19 +626,6 @@ public class GenerateMap : MonoBehaviour
                 grid.Add(node);
             }
         }
-    }
-
-    private void generateParents(Node root)
-    {
-        //root.graphLevel = 0;
-
-        //List<Node> childern = root.getNeighbourNode();
-
-        //for (int i = 0; i < childern.Count; i++)
-        //{
-        //    childern[i].setParentNode(root);
-        //    childern[i].graphLevel = root.graphLevel + 1;
-        //}
     }
 
     /// <summary>
@@ -805,7 +771,6 @@ public class GenerateMap : MonoBehaviour
                 GameObject.Destroy(child.gameObject);
             }
         }
-
 
         this.removeGrid();
         this.generateMapOnly();

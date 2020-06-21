@@ -104,13 +104,6 @@ public class PlayerInput : MonoBehaviour
 
             List<Transform> paths = finder.findShortestPath(startNode, endNode);
 
-            //print("paths count: " + paths.Count);
-
-            //List<Transform> paths = finder.FindPath_DFS_Algo(startNode, endNode);
-
-            //List<Transform> paths = finder.BFS_traversalAlgo(startNode, endNode);
-
-
             if (paths.Count == 0)
             {
                 //print("GAME OVER");
@@ -140,12 +133,6 @@ public class PlayerInput : MonoBehaviour
             this.player = players[0].GetComponent<Player>();
 
             this.player.paths = paths;
-
-            // add level after play
-            //       Level l = new Level(this.player.level, blockPath, this.player.paths);
-            //     this.player.levels.Add(l);
-
-
         }
     }
 
@@ -159,8 +146,6 @@ public class PlayerInput : MonoBehaviour
         {
             Node n = gamenode.GetComponent<Node>();
             n.setWalkable(true);
-
-            //gamenode.GetComponent<Image>().color = Color.white;
         }
 
         if (blocks != null)
@@ -169,7 +154,6 @@ public class PlayerInput : MonoBehaviour
             {
                 Node n = t.GetComponent<Node>();
                 n.setWalkable(false);
-                //t.GetComponent<Image>().color = Color.black;
             }
         }
     }
@@ -193,7 +177,6 @@ public class PlayerInput : MonoBehaviour
     {
         if (this.startNode == null && this.endNode == null)
         {
-            //print("start and end set again");
             btnStartNode();
             btnEndNode();
         }
@@ -208,18 +191,14 @@ public class PlayerInput : MonoBehaviour
 
         if (startNode != null && endNode != null)
         {
-
             Vector2 newpos = startNode.position;
 
             player1[0].transform.position = newpos;
             _startButton[0].transform.position = newpos;
 
-
             newpos = endNode.position;
             _endButton[0].transform.position = newpos;
         }
-
-
     }
 
     public void applicationExit()
@@ -260,7 +239,6 @@ public class PlayerInput : MonoBehaviour
     }
 
 
-
     /// <summary>
     /// Check if there is at least one path for the random block Node.
     /// </summary>
@@ -272,7 +250,6 @@ public class PlayerInput : MonoBehaviour
         blockPath.Add(node.transform);
 
         ShortestPath finder = gameObject.GetComponent<ShortestPath>();
-
 
         if (finder == null) finder = new ShortestPath();
 
@@ -365,7 +342,6 @@ public class PlayerInput : MonoBehaviour
     {
         GameObject[] mapNodes = GameObject.FindGameObjectsWithTag("node");
         List<Node> walkableNodes = new List<Node>();
-
 
         foreach (GameObject mapNode in mapNodes)
         {
@@ -543,7 +519,6 @@ public class PlayerInput : MonoBehaviour
 
     public void btnReplay()
     {
-
         this.player.replay();
         this.player.replayMode = true;
         this.ReplayMode = true;
@@ -561,7 +536,6 @@ public class PlayerInput : MonoBehaviour
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("player");
 
-        //foreach(GameObject go in players)
         this.player = players[0].GetComponent<Player>();
         this.player.autorun = !this.player.autorun;
     }

@@ -31,15 +31,11 @@ public class Player : MonoBehaviour
 
     public string algoName;
 
-    //public List<Level> levelsHistory = new List<Level>();
-
     public List<Level> levels = new List<Level>();
 
     public InputField levelField;
 
-    // ######
     public string playerStep = "node (1,4)";
-    //    private List<string> playerPath = new List<string>() { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)" , "node (9,0)", "node (9,1)" };
 
     public List<string> playerPath = new List<string>() { }; // { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)", };
     private List<string> blockPath = new List<string>() { }; // { "node (1,4)", "node (9,4)", "node (9,9)", "node (9,0)", "node (0,0)", "node (0,9)", "node (9,9)", };
@@ -48,14 +44,12 @@ public class Player : MonoBehaviour
 
     public void SavePlayer()
     {
-        SaveSystem.SavePlayer(this);
+        //SaveSystem.SavePlayer(this);
     }
 
     public void LoadPlayer()
     {
         SetReplay();
-
-        //NazivMetode("start", "end", new List<string>() { "start", "n1", "n2", "n3", "end" });
     }
 
     public void startMove()
@@ -65,9 +59,6 @@ public class Player : MonoBehaviour
 
     public void Start()
     {
-        //this.level = 1;
-
-        //SavePlayer();
     }
 
     public void ListLevels()
@@ -103,7 +94,6 @@ public class Player : MonoBehaviour
                 break;
             }
         }
-
         return null;
     }
 
@@ -137,12 +127,8 @@ public class Player : MonoBehaviour
 
     public void IncreaseLevel()
     {
-        //if (!anyPlayerMoving())
-        //{
-            this.level += 1;
-            UpdateLevelInfo();
-        //}
-
+        this.level += 1;
+        UpdateLevelInfo();
     }
 
     private bool anyPlayerMoving()
@@ -188,9 +174,6 @@ public class Player : MonoBehaviour
         _textLevelGameObject.GetComponent<Text>().text = "LEVEL " + (this.level - 1) + " COMPLETED";
     }
 
-
-
-
     public void Update()
     {
         if (this.playMode)
@@ -199,70 +182,23 @@ public class Player : MonoBehaviour
         }
         if (this.replayMode)
         {
-            //if (moveToStart)
-            //{
-            //    moveToStart = false;
-            //    transformToStart();
-            //}
-
             TriggerReplay(this.replayLevel, this.playerPath);
 
             if (this.playerStep.Equals(this.playerPath.Last()))
                 replayMode = false;
         }
-
-        //else
-        //{
-
-        //    if (replayMode)
-        //    {
-        //        if (moveToStart)
-        //        {
-        //            moveToStart = false;
-        //            transformToStart();
-        //        }
-
-        //        TriggerReplay(this.replayLevel, this.playerPath);
-
-        //        if (this.playerStep.Equals(this.playerPath.Last()))
-        //            replayMode = false;
-        //    }
-        //    else
-        //    {
-        //        // play mode
-        //        //LoadPlayer();
-
-
-        //        if (!stop)
-        //            Move();
-
-        //        if (this.level > 1 && this.stop)
-        //        {
-        //            GameObject _textLevelGameObject = GameObject.Find("TextLevel");
-
-        //            _textLevelGameObject.GetComponent<Text>().text = "GAME OVER";
-        //        }
-        //    }
-        //}
     }
 
     private void RunPlayer()
     {
-        //print("Runner " + this.transform.name + " is moving...");
-
-        //this.printPath();
-        //this.colorPath();
         this.RunPath();
 
         if (this.playerStep.Equals(this.playerPath.Last()))
         {
-            //print(this.transform.name + " is in FINISH");
             if (this.moving) this.IncreaseLevel();
 
             this.moving = false;
-
         }
-
     }
 
     private void RunPath()
@@ -282,12 +218,10 @@ public class Player : MonoBehaviour
             GameObject.Find(node).GetComponent<Image>().color = Color.red;
     }
 
-
     private void transformToStart()
     {
         GameObject start = GameObject.FindGameObjectsWithTag("start").FirstOrDefault();
 
-        // default start
         if (start == null)
             start = GameObject.Find("node (1,4)");
 
@@ -312,11 +246,6 @@ public class Player : MonoBehaviour
             float y_diff = this.transform.position.y - start.transform.position.y;
             this.transform.Translate(0, -y_diff, 0, Space.World);
         }
-
-        print("player cordinates x= " + this.transform.position.x + " , y= " + this.transform.position.y);
-        print("start cordinates x= " + start.transform.position.x + " , y= " + start.transform.position.y);
-
-        print("move to start");
     }
 
     public void Move()
@@ -341,8 +270,6 @@ public class Player : MonoBehaviour
             movePlayer(path);
         }
 
-        //print("current node: " + this.currentNode + "next node: " + this.nextNode + " last node: " + paths.Last().name);
-
         if (this.currentNode == paths.Last().name)
         {
             print("move2");
@@ -359,9 +286,7 @@ public class Player : MonoBehaviour
                 _textLevelGameObject = GameObject.Find("game_info");
 
                 this.levelCompletedText = _textLevelGameObject.GetComponent<Text>();
-
-                //_textLevelGameObject.GetComponent<Text>().text = "LEVEL COMPLETED";
-            }
+          }
 
             if (this.levelCompletedText != null)
             {
@@ -369,13 +294,9 @@ public class Player : MonoBehaviour
 
                 PlayerInput input = this.GetComponent<PlayerInput>();
 
-
-                //print(PlayerPrefs.GetString("ReplayRun"));
-
                 if (input != null && !this.replayMode)
                 {
                     print("New block" + this.replayMode);
-                    //this.IncreaseLevel();
                     input.btnBlockPath();
                 }
 
@@ -386,7 +307,6 @@ public class Player : MonoBehaviour
                     return;
                 }
             }
-
 
             // if autorun is enabled
             if (this.autorun)
@@ -401,7 +321,6 @@ public class Player : MonoBehaviour
                         this.levelText.text = "Level " + this.level;
                 }
             }
-
         }
 
     }
@@ -430,36 +349,21 @@ public class Player : MonoBehaviour
 
     private void movePlayer(Transform path)
     {
-        //print("moveplayer::1::" + path.name);
-
-        // move only for one Node
         if (this.nextNode != path.name) return;
-
-        //print("moveplayer::2");
 
         if (this.currentNode == this.nextNode) return;
 
-        //print("moveplayer::3");
-
-
         float speed = 0.5f;
-
 
         int diff_x = (int)System.Math.Abs((path.position.x - this.transform.position.x));
         int diff_y = (int)System.Math.Abs((path.position.y - this.transform.position.y));
 
-
-        //print("dff_x= " + diff_x + "diff_y" + diff_y);
-
         if (diff_x == 0 && diff_y == 0)
         {
-            //this.currentNode = this.nextNode;
-            //this.nextNode = getNextElement(path);
         }
 
         if (this.transform.position.x < path.position.x && diff_x >= 0)
         {
-            //print("move A1");
             int diff = (int)(path.position.x - this.transform.position.x);
 
             for (int i = 0; i <= diff; i++)
@@ -468,30 +372,19 @@ public class Player : MonoBehaviour
             if (this.transform.position.x >= path.position.x)
             {
                 this.currentNode = this.nextNode;
-                //print("Imamo korak 1");
                 this.nextNode = getNextElement(path);
             }
         }
 
         if (this.transform.position.y < path.position.y && diff_y > 0)
         {
-            //print("move A2");
-            //print("this cordinates x= " + this.transform.position.x + " , y= " + this.transform.position.y);
-            //print("path cordinates x= " + path.position.x + " , y= " + path.position.y);
-            //print("diff " + (path.position.y - this.transform.position.y));
-
             int diff = (int)(path.position.y - this.transform.position.y);
             for (int i = 0; i <= diff; i++)
                 this.transform.Translate(0, speed, 0, Space.World);
 
             if (this.transform.position.y >= path.position.y)
             {
-                //print("this cordinates x= " + this.transform.position.x + " , y= " + this.transform.position.y);
-                //print("path cordinates x= " + path.position.x + " , y= " + path.position.y);
-                //print("diff= " + (path.position.y - this.transform.position.y));
-
                 this.currentNode = this.nextNode;
-                //print("Imamo korak 2");
                 this.nextNode = getNextElement(path);
             }
 
@@ -499,7 +392,6 @@ public class Player : MonoBehaviour
 
         if (this.transform.position.x > path.position.x && diff_x > 0)
         {
-            //print("move A3");
             int diff = (int)(this.transform.position.x - path.position.x);
             for (int i = 0; i <= diff; i++)
                 this.transform.Translate(-speed, 0, 0, Space.World);
@@ -507,14 +399,12 @@ public class Player : MonoBehaviour
             if (this.transform.position.x <= path.position.x)
             {
                 this.currentNode = this.nextNode;
-                //print("Imamo korak 3");
                 this.nextNode = getNextElement(path);
             }
         }
 
         if (this.transform.position.y > path.position.y && diff_y >= 0)
         {
-            //print("move A4");
             int diff = (int)(this.transform.position.y - this.transform.position.y);
             for (int i = 0; i <= diff; i++)
                 this.transform.Translate(0, -speed, 0, Space.World);
@@ -522,11 +412,9 @@ public class Player : MonoBehaviour
             if (this.transform.position.y <= path.position.y)
             {
                 this.currentNode = this.nextNode;
-                //print("Imamo korak 4");
                 this.nextNode = getNextElement(path);
             }
         }
-
     }
 
     string getNextElement(Transform element)
@@ -568,22 +456,19 @@ public class Player : MonoBehaviour
 
     // set Replay mode On/Off
     public void SetReplay()
-    {
-        //if (this.replayMode)
-        //    this.replayMode = false;
-        //else        
+    {   
         this.replayMode = true;
         this.autorun = false;
 
         if (this.levelField != null)
             this.replayLevel = int.Parse(this.levelField.text);
 
-        // correct level input validation
         if (this.replayLevel > this.levels.Count || this.replayLevel < 1)
         {
             this.replayMode = false;
             return;
         }
+
         MovePlayerToStart();
 
         this.playerPath.Clear();
@@ -595,9 +480,6 @@ public class Player : MonoBehaviour
             {
                 if (_level.level == this.replayLevel)
                 {
-                    //foreach (Transform node in _level.movePath)
-                    //    this.playerPath.Add(node.name);
-
                     foreach (Transform node in _level.blockPath)
                         this.blockPath.Add(node.name);
 
@@ -613,15 +495,7 @@ public class Player : MonoBehaviour
                 print("dodato covorva " + s);
             }
 
-            //print("block covorva " + this.blockPath.Count);
-            //this.playerPath.Add("node (1,4)");
-            //this.playerPath.Add("node (4,4)");
-            //this.playerPath.Add("node (4,1)");
-            //this.playerPath.Add("node (0,1)");
-            //this.playerPath.Add("node (0,0)");
-
             SetBlocksForreplay(this.blockPath);
-
 
         }
         else
@@ -650,9 +524,6 @@ public class Player : MonoBehaviour
             GameObject blockGO = GameObject.Find(block);
             blockGO.GetComponent<Image>().color = Color.black;
         }
-
-
-
     }
 
     public void MovePlayerVisual(string startNode, string endNode)
@@ -684,7 +555,6 @@ public class Player : MonoBehaviour
 
         if (_start.y == _end.y)
         {
-            //levo ili desno
             if (_start.x < _end.x)
                 direction = Direction.Bottom;
             else
@@ -693,14 +563,11 @@ public class Player : MonoBehaviour
 
         if (_start.x == _end.x)
         {
-            //gore ili dole
             if (_start.y < _end.y)
                 direction = Direction.Right;
             else
                 direction = Direction.Left; ;
         }
-
-        // print("Direction for " + start.transform.name + " and " + end.transform.name + " is: " + direction);
 
         return direction;
     }
@@ -718,7 +585,7 @@ public class Player : MonoBehaviour
     {
         float speed = 1.5f;
 
-        if (this.transform.name == "player1")  speed = 1f;
+        if (this.transform.name == "player1") speed = 1f;
         if (this.transform.name == "player3") speed = 2f;
 
         int diff_x = (int)System.Math.Abs((this.transform.position.x - target.position.x));
@@ -749,5 +616,4 @@ public class Player : MonoBehaviour
             this.playerStep = target.name;
         }
     }
-
 }

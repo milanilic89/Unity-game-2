@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Node : MonoBehaviour
 {
-
     [SerializeField] private float weight = int.MaxValue;
     [SerializeField] private Transform parentNode = null;
     [SerializeField] public string parentNodeName = null;
@@ -174,7 +173,4 @@ public class Node : MonoBehaviour
         this.isEnd = true;
         //this.walkable = false;
     }
-
-
-
 }
