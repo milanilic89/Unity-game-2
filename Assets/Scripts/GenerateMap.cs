@@ -279,14 +279,15 @@ public class GenerateMap : MonoBehaviour
             alogNameText.GetComponent<Text>().text = "Algorithm name: " + player.algoName + " Checked: " + " TODO " + " Time spent: " + "TODO";
         }
         else
-            alogNameText.GetComponent<Text>().text = "Algorithm name: " + _level.algoName + " Checked: " + _level.checkedCount + " Time spent: " + _level.timeSpent;
+        {
+            alogNameText.GetComponent<Text>().text = "Algorithm name: " + _level.algoName;                 
 
-        //alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
-        //alogNameText.GetComponent<Text>().text = "Checked: " + player.GetLevel(level).checkedCount;
+            alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
+            alogNameText.GetComponent<Text>().text = "Checked: " + _level.checkedCount;
 
-        //alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
-        //alogNameText.GetComponent<Text>().text = "Time spent: " + player.GetLevel(level).timeSpent;
-
+            alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
+            alogNameText.GetComponent<Text>().text = "Time spent: " + _level.timeSpent;
+        }
     }
 
     private void ShowReplayInDataScreen(int level)
@@ -324,14 +325,6 @@ public class GenerateMap : MonoBehaviour
             this.blockNodes = _player.getPlayerBlockPathForLevel(level);
 
             SetNewBlackNodes(_player.getPlayerBlockPathForLevel(level));
-
-            //this.blockNodes.Clear();
-
-            foreach (Transform bn in _player.getPlayerBlockPathForLevel(level))
-            {
-                print("block node:" + bn.name);
-            }
-
         }
 
     }
@@ -405,6 +398,12 @@ public class GenerateMap : MonoBehaviour
             //player.level +=1;
             List<Transform> transformPath = player.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform);
 
+            //double timeSpentRoundedOn5 = System.Math.Round(player.GetComponent<ShortestPath>().timeSpent, 5);
+            
+            double timeSpentRoundedOn5 = player.GetComponent<ShortestPath>().timeSpent;
+
+            int checkedNodes = player.GetComponent<ShortestPath>().checkedNodesCount;
+
             List<string> path = new List<string>();
 
             foreach (Transform node in transformPath)
@@ -413,7 +412,7 @@ public class GenerateMap : MonoBehaviour
             player.playerPath = path;
             player.moving = true;
 
-            Level level = new Level(player.level, this.blockNodes, player.playerPath, player.algoName);
+            Level level = new Level(player.level, this.blockNodes, player.playerPath, player.algoName, timeSpentRoundedOn5, checkedNodes);
             player.levels.Add(level);
         }
     }

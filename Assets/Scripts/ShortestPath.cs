@@ -20,6 +20,10 @@ public class ShortestPath : MonoBehaviour
     /// <returns>A List of transform for the shortest path</returns>
     public List<Transform> findShortestPath(Transform start, Transform end)
     {
+        this.checkedNodesCount = 0;
+
+        double startTime = Time.realtimeSinceStartup;
+
         nodes = GameObject.FindGameObjectsWithTag("node");
 
         List<Transform> result = new List<Transform>();
@@ -40,6 +44,11 @@ public class ShortestPath : MonoBehaviour
 
         // Reverse the list so that it will be from start to end.
         result.Reverse();
+
+        double endTime = (Time.realtimeSinceStartup - startTime);
+
+        this.timeSpent = endTime;
+
         return result;
     }
 
@@ -84,8 +93,6 @@ public class ShortestPath : MonoBehaviour
     /// <returns>The end node</returns>
     private Transform DijkstrasAlgo(Transform start, Transform end)
     {
-        double startTime = Time.realtimeSinceStartup;
-
         // Nodes that are unexplored
         List<Transform> unexplored = new List<Transform>();
 
@@ -100,12 +107,14 @@ public class ShortestPath : MonoBehaviour
             }
         }
 
+        this.checkedNodesCount += 1;
         // Set the starting node weight to 0;
         Node startNode = start.GetComponent<Node>();
         startNode.setWeight(0);
 
         while (unexplored.Count > 0)
         {
+            this.checkedNodesCount += 1;
             // Sort the explored by their weight in ascending order.
             unexplored.Sort((x, y) => x.GetComponent<Node>().getWeight().CompareTo(y.GetComponent<Node>().getWeight()));
 
@@ -127,7 +136,10 @@ public class ShortestPath : MonoBehaviour
             List<Transform> neighbours = currentNode.getNeighbourNode();
             foreach (Transform neighNode in neighbours)
             {
+                this.checkedNodesCount += 1;
                 Node node = neighNode.GetComponent<Node>();
+
+                this.checkedNodesCount += 1;
 
                 // We want to avoid those that had been explored and is not walkable.
                 if (unexplored.Contains(neighNode) && node.isWalkable())
@@ -147,11 +159,6 @@ public class ShortestPath : MonoBehaviour
             }
 
         }
-
-        double endTime = (Time.realtimeSinceStartup - startTime);
-        //print("Compute time: " + endTime);
-
-        //print("Path completed!");
 
         return end;
     }
