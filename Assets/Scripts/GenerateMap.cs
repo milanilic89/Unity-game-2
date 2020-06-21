@@ -158,6 +158,11 @@ public class GenerateMap : MonoBehaviour
     /// </summary>
     private void PlayNextLevel()
     {
+        //GameObject dataScreen = GameObject.Find("ViewScreenData");
+
+        //print("hide data screen:" + dataScreen != null);
+        //dataScreen.GetComponent<Image>().enabled = false;
+
         updateBlackNodes();
 
         //if (this.gameLevel == 2)
