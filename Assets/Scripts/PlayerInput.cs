@@ -39,7 +39,7 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SetDefaultNodes();
+        //SetDefaultNodes();
     }
 
 
@@ -143,8 +143,8 @@ public class PlayerInput : MonoBehaviour
             this.player.paths = paths;
 
             // add level after play
-     //       Level l = new Level(this.player.level, blockPath, this.player.paths);
-       //     this.player.levels.Add(l);
+            //       Level l = new Level(this.player.level, blockPath, this.player.paths);
+            //     this.player.levels.Add(l);
 
 
         }
@@ -183,9 +183,16 @@ public class PlayerInput : MonoBehaviour
             SceneManager.LoadScene("RunAndPlay", LoadSceneMode.Additive);
         else
         {
+            GameObject startRunner = GameObject.Find("startRunner");
+
+            if (startRunner != null)
+                startRunner.GetComponent<Button>().onClick.Invoke();
+
             // run game
-            btnFindPath();
+            //btnFindPath();
         }
+
+
     }
 
     public void SetDefaultNodes()
