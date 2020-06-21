@@ -79,6 +79,35 @@ public class Player : MonoBehaviour
         }
     }
 
+    public List<string> getPlayerPathForLevel(int ind)
+    {
+        foreach (Level level in this.levels)
+        {
+            if (level.level == ind)
+            {
+                return level.movePath;
+                break;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Transform> getPlayerBlockPathForLevel(int ind)
+    {
+        foreach (Level level in this.levels)
+        {
+            if (level.level == ind)
+            {
+                return level.blockPath;
+                break;
+            }
+        }
+
+        return null;
+    }
+
+
     public void ListLevels(int ind)
     {
         foreach (Level level in this.levels)
@@ -90,6 +119,20 @@ public class Player : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public Level GetLevel(int ind)
+    {
+        foreach (Level level in this.levels)
+        {
+            if (level.level == ind)
+            {
+                return level;
+                break;
+            }
+        }
+
+        return null;
     }
 
     public void IncreaseLevel()
@@ -154,6 +197,20 @@ public class Player : MonoBehaviour
         {
             RunPlayer();
         }
+        if (this.replayMode)
+        {
+            //if (moveToStart)
+            //{
+            //    moveToStart = false;
+            //    transformToStart();
+            //}
+
+            TriggerReplay(this.replayLevel, this.playerPath);
+
+            if (this.playerStep.Equals(this.playerPath.Last()))
+                replayMode = false;
+        }
+
         //else
         //{
 

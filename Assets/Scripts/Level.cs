@@ -9,6 +9,8 @@ public class Level : MonoBehaviour
     //public List<Transform> movePath;
     public List<string> movePath;
     public string algoName;
+    public string checkedCount;
+    public string timeSpent;
 
 
     public Level(int level, List<Transform> blockPath, List<string> movePath, string algoName)
@@ -27,5 +29,13 @@ public class Level : MonoBehaviour
                 this.movePath.Add(t);
 
         this.algoName = algoName;
+    }
+
+    public void PrintLevel()
+    {
+        print(this.level);
+        print(this.algoName);
+        print(this.timeSpent);
+        print(this.checkedCount);
     }
 }

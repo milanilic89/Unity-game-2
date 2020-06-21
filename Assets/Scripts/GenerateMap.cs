@@ -32,6 +32,8 @@ public class GenerateMap : MonoBehaviour
 
     public List<Transform> grid = new List<Transform>();
     public List<Transform> blockNodes = new List<Transform>();
+    public List<Transform> currentBlockNodes = new List<Transform>();
+
 
     public Transform dataScreenPrefab;
     public Transform dataScreenTextPrefab;
@@ -45,6 +47,7 @@ public class GenerateMap : MonoBehaviour
     {
         this.generateGrid();
         this.generateNeighbours();
+        //this.generateParents();
 
     }
 
@@ -105,6 +108,12 @@ public class GenerateMap : MonoBehaviour
         bool algo2 = GameObject.Find("Algo2").GetComponent<Toggle>().isOn;
         bool algo3 = GameObject.Find("Algo3").GetComponent<Toggle>().isOn;
 
+        enabledAlgorithams = 0;
+        if (algo1) enabledAlgorithams += 1;
+        if (algo2) enabledAlgorithams += 1;
+        if (algo3) enabledAlgorithams += 1;
+
+
         //for (int i = 1; i <= enabledAlgorithams; i++)
         //{
         //    Color randomColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
@@ -149,6 +158,11 @@ public class GenerateMap : MonoBehaviour
     /// </summary>
     private void PlayNextLevel()
     {
+        updateBlackNodes();
+
+        //if (this.gameLevel == 2)
+        //    CreateDataScreen();
+
         // if all players are in next level
         if (allPlayersTheSameLevel())
         {
@@ -159,6 +173,27 @@ public class GenerateMap : MonoBehaviour
 
             // play new level - visual
             playNewLevel();
+        }
+    }
+
+    private void updateBlackNodes()
+    {
+        GameObject[] nodes = GameObject.FindGameObjectsWithTag("node");
+
+        if (this.currentBlockNodes.Count > 0 && this.blockNodes.Count !=0)
+        {
+
+            foreach (GameObject gamenode in nodes)
+            {
+                gamenode.GetComponent<Image>().color = Color.white;
+            }
+
+            print("set current black nodes " + this.currentBlockNodes.Count);
+
+            foreach (Transform t in this.currentBlockNodes)
+            {
+                t.GetComponent<Image>().color = Color.black;
+            }
         }
     }
 
@@ -174,6 +209,9 @@ public class GenerateMap : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// TODO: when game is over - set player
+    /// </summary>
     private void StopAllPlayers()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("player");
@@ -204,47 +242,107 @@ public class GenerateMap : MonoBehaviour
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("player");
 
-        GameObject player1 = GameObject.Find("player1");
+        GameObject dataScreenWindow = GameObject.Find("DataScreenWindow");
 
-        Player player = player1.GetComponent<Player>();
+        // destroy previous level data and add new
+        foreach (Transform child in dataScreenWindow.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
 
-        player.ListLevels(level);
+        foreach (GameObject _player in players)
+        {
+            Player player = _player.GetComponent<Player>();
 
-        ShowDataScreen();
+            ShowDataScreen(level, player);
+        }
+
+        ShowReplayInDataScreen(level);
     }
 
-    private void ShowDataScreen()
+    private void ShowDataScreen(int level, Player player)
     {
         GameObject dataScreenWindow = GameObject.Find("DataScreenWindow");
 
-        if (dataScreenWindow != null)
+        Transform alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
+        Level _level = player.GetLevel(level);
+
+        if (_level == null && level == 1)
         {
-            // destroy previous level data and add new
-            foreach (Transform child in dataScreenWindow.transform)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-
-            Transform alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
-            alogNameText.GetComponent<Text>().text = "Name Ta-ha!!!!!!!!!!";
-
-            alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
-            alogNameText.GetComponent<Text>().text = "Count Ta-ha!!!!!!!!!!";
-
-            alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
-            alogNameText.GetComponent<Text>().text = "Time Ta-ha!!!!!!!!!!";
-
-            Transform replayLevelButton = Instantiate(dataScreenReplayPrefab, dataScreenWindow.transform);
-            replayLevelButton.GetComponent<Button>().onClick.AddListener(delegate { replayLevel(2); });
-
-
+            alogNameText.GetComponent<Text>().text = "Algorithm name: " + player.algoName + " Checked: " + " TODO " + " Time spent: " + "TODO";
         }
+        else
+            alogNameText.GetComponent<Text>().text = "Algorithm name: " + _level.algoName + " Checked: " + _level.checkedCount + " Time spent: " + _level.timeSpent;
+
+        //alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
+        //alogNameText.GetComponent<Text>().text = "Checked: " + player.GetLevel(level).checkedCount;
+
+        //alogNameText = Instantiate(dataScreenTextPrefab, dataScreenWindow.transform);
+        //alogNameText.GetComponent<Text>().text = "Time spent: " + player.GetLevel(level).timeSpent;
+
+    }
+
+    private void ShowReplayInDataScreen(int level)
+    {
+        GameObject dataScreenWindow = GameObject.Find("DataScreenWindow");
+
+        Transform replayLevelButton = Instantiate(dataScreenReplayPrefab, dataScreenWindow.transform);
+        replayLevelButton.GetComponent<Button>().onClick.AddListener(delegate { replayLevel(level); });
+
+        replayLevelButton.GetComponent<Button>().GetComponentInChildren<Text>().text = "Replay Level " + level;
 
     }
 
     private void replayLevel(int level)
     {
-        print("replaying level " + level);
+        //print("replaying level " + level);
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
+
+        GameObject startNode = GameObject.Find("node (" + this.Xstart + "," + this.Ystart + ")");
+        //        GameObject endNode = GameObject.Find("node (" + this.Xend + "," + this.Yend + ")");
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            Player _player = players[i].GetComponent<Player>();
+            players[i].transform.position = startNode.transform.position;
+            _player.replayMode = true;
+            _player.playerStep = startNode.transform.name;
+            _player.replayLevel = level;
+            _player.playerPath = _player.getPlayerPathForLevel(level);
+
+            if (this.currentBlockNodes.Count == 0)
+                this.currentBlockNodes = this.blockNodes; //SetCurrentBlackNodes(this.blockNodes);
+
+            this.blockNodes = _player.getPlayerBlockPathForLevel(level);
+
+            SetNewBlackNodes(_player.getPlayerBlockPathForLevel(level));
+
+            //this.blockNodes.Clear();
+
+            foreach (Transform bn in _player.getPlayerBlockPathForLevel(level))
+            {
+                print("block node:" + bn.name);
+            }
+
+        }
+
+    }
+
+    private void SetNewBlackNodes(List<Transform> newBlackNodes)
+    {
+        GameObject[] nodes = GameObject.FindGameObjectsWithTag("node");
+
+        foreach (GameObject gamenode in nodes)
+        {
+            gamenode.GetComponent<Image>().color = Color.white;
+        }
+
+        foreach (Transform t in newBlackNodes)
+        {
+            t.GetComponent<Image>().color = Color.black;
+        }
+
     }
 
     private void addNewBlockNode()
@@ -397,7 +495,7 @@ public class GenerateMap : MonoBehaviour
         }
 
         this.autoMode = false;
-        this.gameStop = true;
+        //this.gameStop = true;
         StopAllPlayers();
     }
 
@@ -503,6 +601,15 @@ public class GenerateMap : MonoBehaviour
             nextPlayer.moving = true;
         }
 
+        //int movingCount = 0;
+        //foreach (GameObject player in players)
+        //{
+        //    if (player.GetComponent<Player>().moving)
+        //        movingCount++;
+        //}
+
+        //if (this.enabledAlgorithams == movingCount)
+        //    CreateDataScreen();
     }
 
     /// <summary>
@@ -527,6 +634,19 @@ public class GenerateMap : MonoBehaviour
                 grid.Add(node);
             }
         }
+    }
+
+    private void generateParents(Node root)
+    {
+        //root.graphLevel = 0;
+
+        //List<Node> childern = root.getNeighbourNode();
+
+        //for (int i = 0; i < childern.Count; i++)
+        //{
+        //    childern[i].setParentNode(root);
+        //    childern[i].graphLevel = root.graphLevel + 1;
+        //}
     }
 
     /// <summary>

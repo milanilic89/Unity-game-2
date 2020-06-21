@@ -19,6 +19,7 @@ public class Node : MonoBehaviour
     public int x=0;
     public int y=0;
 
+    public int graphLevel;
 
     // Use this for initialization
     void Start()
