@@ -192,12 +192,19 @@ public class ShortestPath : MonoBehaviour
 
             var neighbours = current.GetComponent<Node>().getNeighbourNode().Where(n => !visited.Contains(n) && n.GetComponent<Node>().isWalkable());
 
-            // If you don't care about the left-to-right order, remove the Reverse
+            //foreach (var neighbour in neighbours)
+            //{
+            //    stack.Push(neighbour);
+            //    neighbour.GetComponent<Node>().setParentNode(current);
+            //}
+
+            // left-to-right order
             foreach (var neighbour in neighbours.Reverse())
             {
                 stack.Push(neighbour);
                 neighbour.GetComponent<Node>().setParentNode(current);
             }
+
         }
 
         return null;
