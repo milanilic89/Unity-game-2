@@ -37,33 +37,16 @@ public class ShortestPath : MonoBehaviour
         if (algorithmName.Equals("Dijkstra"))
             node = DijkstrasAlgo(start, end);
 
-        //try
-        //{
-        //    if (algorithmName.Equals("DFS"))
-        //    {
-        //        node = DFS_Search(start, end.name);
-        //    }
-        //}
-        //catch(StackOverflowException)
-        //{ }
-        //finally
-        //{
-        //    findShortestPath(start, end, "Dijkstra");
-        //}
-
         if (algorithmName.Equals("DFS"))
         {
-            node = BFS_Search(start, end.name);
+            node = DepthFirstTraversal(start, end);
         }
 
-        int i = 0;
         while (node != null)
         {
             result.Add(node);
             Node currentNode = node.GetComponent<Node>();
             node = currentNode.getParentNode();
-            i++;
-            if (i > 2000) break;
         }
 
         // Reverse the list so that it will be from start to end.
@@ -181,6 +164,39 @@ public class ShortestPath : MonoBehaviour
                     neighbour.GetComponent<Node>().setParentNode(e);
                     S.Add(neighbour);
                 }
+            }
+        }
+
+        return null;
+    }
+
+
+    public Transform DepthFirstTraversal(Transform start, Transform end)
+    {
+        HashSet<Transform> visited = new HashSet<Transform>();
+        Stack<Transform> stack = new Stack<Transform>();
+
+        stack.Push(start);
+
+        while (stack.Count != 0)
+        {
+            Transform current = stack.Pop();
+
+            if (current == end)
+            {
+                return current;
+            }
+
+            if (!visited.Add(current))
+                continue;
+
+            var neighbours = current.GetComponent<Node>().getNeighbourNode().Where(n => !visited.Contains(n) && n.GetComponent<Node>().isWalkable());
+
+            // If you don't care about the left-to-right order, remove the Reverse
+            foreach (var neighbour in neighbours.Reverse())
+            {
+                stack.Push(neighbour);
+                neighbour.GetComponent<Node>().setParentNode(current);
             }
         }
 
