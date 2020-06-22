@@ -571,6 +571,7 @@ public class GenerateMap : MonoBehaviour
             nextPlayer.level = 1;
             List<Transform> transformPath = nextPlayer.GetComponent<ShortestPath>().findShortestPath(startNode.transform, endNode.transform, nextPlayer.algoName);
             List<string> path = new List<string>();
+            nextPlayer.transform.position = startNode.transform.position;
 
             foreach (Transform node in transformPath)
                 path.Add(node.name);

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -39,11 +40,12 @@ public class ShortestPath : MonoBehaviour
         if (algorithmName.Equals("DFS"))
         {
             //Debug.Log("DFS has a bug");
-            //List<Transform> path = FindPath_DFS_Algo(start, end);            
+            //List<Transform> path = FindPath_DFS_Algo(start, end);
             //this.timeSpent = (Time.realtimeSinceStartup - startTime);
             //return path;
-            node = BFS_Search(start, end.name);
+            node = DijkstrasAlgo(start, end);
         }
+
 
         while (node != null)
         {
@@ -191,16 +193,22 @@ public class ShortestPath : MonoBehaviour
             return path;
         }
 
-        foreach (Transform tn in start.GetComponent<Node>().getNeighbourNode())
+
+        Node startNode = start.GetComponent<Node>();
+
+        if (startNode != null && startNode.isWalkable())
         {
-            this.checkedNodesCount += 1;
-            if (tn.GetComponent<Node>().isWalkable())
+            foreach (Transform tn in startNode.getNeighbourNode())
             {
-                List<Transform> childPath = FindPath_DFS_Algo(tn, target);
-                if (childPath != null)
+                this.checkedNodesCount += 1;
+                if (tn.GetComponent<Node>().isWalkable())
                 {
-                    path.AddRange(childPath);
-                    return path;
+                    List<Transform> childPath = FindPath_DFS_Algo(tn, target);
+                    if (childPath != null)
+                    {
+                        path.AddRange(childPath);
+                        return path;
+                    }
                 }
             }
         }

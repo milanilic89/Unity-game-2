@@ -167,9 +167,10 @@ public class Player : MonoBehaviour
 
     private void movePlayerToNode(Direction direction, Transform target)
     {
-        float speed = 1.5f;
+        float speed = 1.2f;
 
-        if (this.transform.name == "player1") speed = 1f;
+        // change speed
+        if (this.transform.name == "player1") speed = 1.5f;
         if (this.transform.name == "player3") speed = 2f;
 
         int diff_x = (int)System.Math.Abs((this.transform.position.x - target.position.x));
