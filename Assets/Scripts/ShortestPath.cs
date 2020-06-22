@@ -176,6 +176,8 @@ public class ShortestPath : MonoBehaviour
         HashSet<Transform> visited = new HashSet<Transform>();
         Stack<Transform> stack = new Stack<Transform>();
 
+
+
         stack.Push(start);
 
         while (stack.Count != 0)
@@ -184,13 +186,14 @@ public class ShortestPath : MonoBehaviour
 
             if (current == end)
             {
+                this.checkedNodesCount += visited.Count();
                 return current;
             }
 
             if (!visited.Add(current))
                 continue;
 
-            var neighbours = current.GetComponent<Node>().getNeighbourNode().Where(n => !visited.Contains(n) && n.GetComponent<Node>().isWalkable());
+            var neighbours = current.GetComponent<Node>().getNeighbourNode().Where(n => !visited.Contains(n) && n.GetComponent<Node>().isWalkable() && n != start);
 
             //foreach (var neighbour in neighbours)
             //{
