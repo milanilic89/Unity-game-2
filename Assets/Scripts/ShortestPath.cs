@@ -37,18 +37,23 @@ public class ShortestPath : MonoBehaviour
         if (algorithmName.Equals("Dijkstra"))
             node = DijkstrasAlgo(start, end);
 
-        try
+        //try
+        //{
+        //    if (algorithmName.Equals("DFS"))
+        //    {
+        //        node = DFS_Search(start, end.name);
+        //    }
+        //}
+        //catch(StackOverflowException)
+        //{ }
+        //finally
+        //{
+        //    findShortestPath(start, end, "Dijkstra");
+        //}
+
+        if (algorithmName.Equals("DFS"))
         {
-            if (algorithmName.Equals("DFS"))
-            {
-                node = DFS_Search(start, end.name);
-            }
-        }
-        catch(StackOverflowException)
-        { }
-        finally
-        {
-            findShortestPath(start, end, "Dijkstra");
+            node = BFS_Search(start, end.name);
         }
 
         int i = 0;
