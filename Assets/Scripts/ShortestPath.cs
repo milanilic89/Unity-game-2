@@ -37,21 +37,28 @@ public class ShortestPath : MonoBehaviour
         if (algorithmName.Equals("Dijkstra"))
             node = DijkstrasAlgo(start, end);
 
-        if (algorithmName.Equals("DFS"))
+        try
         {
-            //Debug.Log("DFS has a bug");
-            //List<Transform> path = FindPath_DFS_Algo(start, end);
-            //this.timeSpent = (Time.realtimeSinceStartup - startTime);
-            //return path;
-            node = DijkstrasAlgo(start, end);
+            if (algorithmName.Equals("DFS"))
+            {
+                node = DFS_Search(start, end.name);
+            }
+        }
+        catch(StackOverflowException)
+        { }
+        finally
+        {
+            findShortestPath(start, end, "Dijkstra");
         }
 
-
+        int i = 0;
         while (node != null)
         {
             result.Add(node);
             Node currentNode = node.GetComponent<Node>();
             node = currentNode.getParentNode();
+            i++;
+            if (i > 2000) break;
         }
 
         // Reverse the list so that it will be from start to end.
@@ -178,42 +185,31 @@ public class ShortestPath : MonoBehaviour
     /// <summary>
     /// Depth-first search algorithm to find the shortest path
     /// </summary>
-    /// <param name="start">The start point</param>
-    /// <param name="target">The end point</param>
+    /// <param name="root">The start point</param>
+    /// <param name="nameToSearchFor">The end point</param>
     /// <returns>The end node</returns>
-    public List<Transform> FindPath_DFS_Algo(Transform start, Transform target)
+    public Transform DFS_Search(Transform root, string nameToSearchFor)
     {
-        List<Transform> path = new List<Transform>();
+        if (nameToSearchFor == root.name)
+            return root;
 
-        path.Add(start);
+        Transform personFound = null;
 
-        if (target == start)
+        foreach (Transform child in root.GetComponent<Node>().getNeighbourNode())
         {
-            this.checkedNodesCount += 1;
-            return path;
-        }
-
-
-        Node startNode = start.GetComponent<Node>();
-
-        if (startNode != null && startNode.isWalkable())
-        {
-            foreach (Transform tn in startNode.getNeighbourNode())
+            if (child.GetComponent<Node>().isWalkable())// && root != child)
             {
-                this.checkedNodesCount += 1;
-                if (tn.GetComponent<Node>().isWalkable())
+                personFound = DFS_Search(child, nameToSearchFor);
+                if (personFound != null)
                 {
-                    List<Transform> childPath = FindPath_DFS_Algo(tn, target);
-                    if (childPath != null)
-                    {
-                        path.AddRange(childPath);
-                        return path;
-                    }
+                    child.GetComponent<Node>().setParentNode(root);
+                    break;
                 }
             }
         }
 
-        return null;
+        return personFound;
     }
 
 }
+
